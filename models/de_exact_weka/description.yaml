@@ -1,0 +1,44 @@
+---
+#NOTE!!! this configuration does not use features based on function/content words, stems, paraphrases...
+
+aligner:
+  class: beer.alignment.MeteorAligner
+  params:
+    exact: yes
+  
+brewer:
+  class: beer.learningToRank.Weka
+  params:
+    classifier: weka.classifiers.functions.Logistic
+    classifierParams: -R 1.0E-8 -M -1
+
+ingredients:
+  -
+    class: beer.ingredients.Kendall
+  
+  -
+    class: beer.ingredients.PETcount
+
+  -
+    class: beer.ingredients.PETnodes
+    params:
+      functions: 
+        - mono
+        - inv
+        - branching=4
+        - branching>4
+
+  -
+    class: beer.ingredients.CharNGrams
+    params:
+      precision: true
+      recall: true
+      fScore: true
+      orders: [1, 2, 3, 4, 5, 6]
+  
+  -
+    class: beer.ingredients.WordMatchingCoverage
+    params:
+      -
+        modules: [exact]
+        scores:  [precision, recall, fScore]

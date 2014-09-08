@@ -1,0 +1,4 @@
+#!/bin/bash
+BEER_HOME=`dirname $0`
+CP=`find $BEER_HOME -name \*.jar | tr "\n" :`
+java -Dfile.encoding=UTF8 -XX:+UseCompressedOops -Xmx2g -cp $CP multeval.MultEval $@

@@ -1,0 +1,53 @@
+---
+
+aligner:
+  class: beer.alignment.MeteorAligner
+  params:
+    exact: yes
+    paraphrase: yes
+  
+brewer:
+  class: beer.learningToRank.RankLib
+  params:
+    ranker: RankNet
+    hiddenNodes: 15
+
+ingredients:
+  -
+    class: beer.ingredients.Kendall
+  
+  -
+    class: beer.ingredients.PETcount
+
+  -
+    class: beer.ingredients.PETnodes
+    params:
+      functions: 
+        - mono
+        - inv
+        - branching=4
+        - branching>4
+
+  -
+    class: beer.ingredients.CharNGrams
+    params:
+      precision: true
+      recall: true
+      fScore: true
+      orders: [1, 2, 3, 4, 5, 6]
+  
+  -
+    class: beer.ingredients.FunctionAndContentWordsCoverage
+    params:
+      functionWords: [precision, recall, fScore]
+      contentWords:  [precision, recall, fScore]
+
+  -
+    class: beer.ingredients.WordMatchingCoverage
+    params:
+      -
+        modules: [exact]
+        scores:  [precision, recall, fScore]
+      -
+        modules: [paraphrase]
+        scores:  [precision, recall, fScore]

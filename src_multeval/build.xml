@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<project name="multeval" default="jar" basedir=".">
+
+  <!-- Read the bash script "constants" as if it is a properties file -->
+  <!-- It must contain the variables "version" and "meteor_version" -->
+  <!-- <property name="version" value="0.5.0" /> -->
+  <!-- <property name="meteor_version" value="1.4" /> -->
+  <property file="constants"/>
+
+  <property name="meteor_jar" value="../meteor-${meteor_version}/meteor-${meteor_version}.jar"/>
+  <available file="${meteor_jar}" property="meteor.present"/>
+
+  <target name="has_meteor" if="meteor.present"/>
+  <target name="not_has_meteor" unless="meteor.present">
+    <fail message="Did not find METEOR JAR required for compilation at ${meteor_jar}"/>
+  </target>
+  <target name="check_meteor" depends="has_meteor,not_has_meteor"/>
+
+  <property name="beer_jar" value="../../beer_${beer_version}.jar"/>
+  <available file="${beer_jar}" property="beer.present"/>
+
+  <target name="has_beer" if="beer.present"/>
+  <target name="not_has_beer" unless="beer.present">
+    <fail message="Did not find METEOR JAR required for compilation at ${beer_jar}"/>
+  </target>
+  <target name="check_beer" depends="has_beer,not_has_beer"/>
+
+  <!-- Compile the Java code -->
+  <target name="compile" depends="check_meteor,check_beer">
+    <mkdir dir="bin" />
+    <javac compiler="javac1.5" srcdir="src" destdir="bin"
+	   classpath="lib/guava-11.0.jar:lib/tercom-0.8.0.jar:lib/jannopts.jar:${meteor_jar}:${beer_jar}"
+	   includeantruntime="false"
+	   debug="on" encoding="utf8" />
+  </target>
+  
+  <!-- Delete the compiled files -->
+  <target name="clean">
+    <delete verbose="true" quiet="true">
+      <fileset dir="bin">
+	<include name="**/*.class" />
+      </fileset>
+    </delete>
+  </target>
+  
+  <!-- Create a JAR file of the compiled classes -->
+  <target name="jar" depends="compile">
+    <jar destfile="multeval-${version}.jar">
+
+      <fileset dir="bin" includes="**/*.class" />
+      <zipfileset src="lib/jannopts.jar" excludes="META-INF/*" />
+      <zipfileset src="lib/guava-11.0.jar" excludes="META-INF/*" />
+
+<!-- JARs are braindead regarding CLASSPATH
+      <manifest>
+	<attribute name="Main-Class"
+		   value="multeval.MultEval"/>
+	<attribute name="Class-Path"
+		   value="lib/tercom-0.7.26.jar:lib/meteor-1.2/meteor-1.2.jar"/>
+      </manifest>
+-->
+    </jar>
+  </target>
+</project>
+

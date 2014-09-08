@@ -1,0 +1,15 @@
+#!/bin/bash
+#if [ ! -d "$DIRECTORY" ]; then
+METEOR_DIR=`ls lib/meteor* -1d | head -1`
+if [ ! -d "$METEOR_DIR" ]; then
+  echo "METEOR is not present in the installation of BEER at the moment"
+  echo "Don't worry, I will install it for you now"
+  cd lib
+  wget http://www.cs.cmu.edu/~alavie/METEOR/download/meteor-1.5.tar.gz
+  tar xfz meteor*.tar.gz
+  rm meteor*.tar.gz
+  cd ..
+fi
+BEER_HOME=`dirname $0`
+CP=`ls $BEER_HOME/*.jar $BEER_HOME/lib/*.jar $BEER_HOME/lib/meteor*/*.jar -1 | tr "\n" :`
+java -Xmx4G -cp $CP beer.Evaluation $@

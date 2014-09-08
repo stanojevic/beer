@@ -1,0 +1,241 @@
+---
+
+resources:
+################### English training configurations ############################
+
+  en_func_exact_para_stem_syn_weka:
+    funcWords:  $METEOR/resources/function/english.words
+    synonym:    $METEOR/resources/synonym
+    paraphrase: $METEOR/data/paraphrase-en.gz
+    stem: yes
+    normalization: yes
+    models:
+      evaluation: en_func_exact_para_stem_syn_weka
+      tuning: en_func_exact_para_stem_syn_weka
+
+  en_func_exact_para_stem_weka:
+    funcWords:  $METEOR/resources/function/english.words
+    synonym:    $METEOR/resources/synonym
+    paraphrase: $METEOR/data/paraphrase-en.gz
+    stem: yes
+    normalization: yes
+    models:
+      evaluation: en_func_exact_para_stem_weka
+      tuning: en_func_exact_para_stem_weka
+      
+  en_func_exact_para_weka:
+    funcWords:  $METEOR/resources/function/english.words
+    synonym:    $METEOR/resources/synonym
+    paraphrase: $METEOR/data/paraphrase-en.gz
+    stem: yes
+    normalization: yes
+    models:
+      evaluation: en_func_exact_para_weka
+      tuning: en_func_exact_para_weka
+      
+  en_func_exact_stem_weka:
+    funcWords:  $METEOR/resources/function/english.words
+    synonym:    $METEOR/resources/synonym
+    paraphrase: $METEOR/data/paraphrase-en.gz
+    stem: yes
+    normalization: yes
+    models:
+      evaluation: en_func_exact_stem_weka
+      tuning: en_func_exact_stem_weka
+      
+  en_exact_weka:
+    funcWords:  $METEOR/resources/function/english.words
+    synonym:    $METEOR/resources/synonym
+    paraphrase: $METEOR/data/paraphrase-en.gz
+    stem: yes
+    normalization: yes
+    models:
+      evaluation: en_exact_weka
+      tuning: en_exact_weka
+      
+################### French training configurations ############################
+
+  fr_func_exact_para_stem_weka:
+    funcWords:  $METEOR/resources/function/french.words
+    paraphrase: $METEOR/data/paraphrase-fr.gz
+    stem: yes
+    normalization: yes
+    models:
+      evaluation: fr_func_exact_para_stem_weka
+      tuning: fr_func_exact_para_stem_weka
+
+  fr_func_exact_para_weka:
+    funcWords:  $METEOR/resources/function/french.words
+    paraphrase: $METEOR/data/paraphrase-fr.gz
+    normalization: yes
+    models:
+      evaluation: fr_func_exact_para_weka
+      tuning: fr_func_exact_para_weka
+
+  fr_func_exact_stem_weka:
+    funcWords:  $METEOR/resources/function/french.words
+    stem: yes
+    normalization: yes
+    models:
+      evaluation: fr_func_exact_stem_weka
+      tuning: fr_func_exact_stem_weka
+
+  fr_exact_weka:
+    funcWords:  $METEOR/resources/function/french.words
+    paraphrase: $METEOR/data/paraphrase-fr.gz
+    stem: yes
+    normalization: yes
+    models:
+      evaluation: fr_exact_weka
+      tuning: fr_exact_weka
+
+################### Czech training configurations ############################
+      
+  cs_func_exact_para_weka:
+    funcWords:  $METEOR/resources/function/czech.words
+    paraphrase: $METEOR/data/paraphrase-cz.gz
+    normalization: yes
+    models:
+      evaluation: cs_func_exact_para_weka
+      tuning: cs_func_exact_para_weka
+  cs_exact_weka:
+    funcWords:  $METEOR/resources/function/czech.words
+    paraphrase: $METEOR/data/paraphrase-cz.gz
+    normalization: yes
+    models:
+      evaluation: cs_exact_weka
+      tuning: cs_exact_weka
+
+################### German training configurations ############################
+  de_func_exact_para_stem_weka:
+    funcWords:  $METEOR/resources/function/german.words
+    paraphrase: $METEOR/data/paraphrase-de.gz
+    stem: yes
+    normalization: yes
+    models:
+      evaluation: de_func_exact_para_stem_weka
+      tuning: de_func_exact_para_stem_weka
+  de_func_exact_para_weka:
+    funcWords:  $METEOR/resources/function/german.words
+    paraphrase: $METEOR/data/paraphrase-de.gz
+    stem: yes
+    normalization: yes
+    models:
+      evaluation: de_func_exact_para_weka
+      tuning: de_func_exact_para_weka
+  de_func_exact_stem_weka:
+    funcWords:  $METEOR/resources/function/german.words
+    paraphrase: $METEOR/data/paraphrase-de.gz
+    stem: yes
+    normalization: yes
+    models:
+      evaluation: de_func_exact_stem_weka
+      tuning: de_func_exact_stem_weka
+  de_exact_weka:
+    funcWords:  $METEOR/resources/function/german.words
+    paraphrase: $METEOR/data/paraphrase-de.gz
+    stem: yes
+    normalization: yes
+    models:
+      evaluation: de_exact_weka
+      tuning: de_exact_weka
+
+################### Spanish training configurations ############################
+
+  es_func_exact_para_stem_weka:
+    funcWords:  $METEOR/resources/function/spanish.words
+    paraphrase: $METEOR/data/paraphrase-es.gz
+    stem: yes
+    normalization: yes
+    models:
+      evaluation: es_func_exact_para_stem_weka
+      tuning: es_func_exact_para_stem_weka
+  es_func_exact_para_weka:
+    funcWords:  $METEOR/resources/function/spanish.words
+    paraphrase: $METEOR/data/paraphrase-es.gz
+    stem: yes
+    normalization: yes
+    models:
+      evaluation: es_func_exact_para_weka
+      tuning: es_func_exact_para_weka
+  es_func_exact_stem_weka:
+    funcWords:  $METEOR/resources/function/spanish.words
+    paraphrase: $METEOR/data/paraphrase-es.gz
+    stem: yes
+    normalization: yes
+    models:
+      evaluation: es_func_exact_stem_weka
+      tuning: es_func_exact_stem_weka
+  es_exact_weka:
+    funcWords:  $METEOR/resources/function/spanish.words
+    paraphrase: $METEOR/data/paraphrase-es.gz
+    stem: yes
+    normalization: yes
+    models:
+      evaluation: es_exact_weka
+      tuning: es_exact_weka
+
+################### Russian training configurations ############################
+
+  ru_func_exact_para_stem_weka:
+    funcWords:  $METEOR/resources/function/russian.words
+    paraphrase: $METEOR/data/paraphrase-ru.gz
+    stem: yes
+    normalization: yes
+    models:
+      evaluation: ru_func_exact_para_stem_weka
+      tuning: ru_func_exact_para_stem_weka
+  ru_func_exact_para_weka:
+    funcWords:  $METEOR/resources/function/russian.words
+    paraphrase: $METEOR/data/paraphrase-ru.gz
+    stem: yes
+    normalization: yes
+    models:
+      evaluation: ru_func_exact_para_weka
+      tuning: ru_func_exact_para_weka
+  ru_func_exact_stem_weka:
+    funcWords:  $METEOR/resources/function/russian.words
+    paraphrase: $METEOR/data/paraphrase-ru.gz
+    stem: yes
+    normalization: yes
+    models:
+      evaluation: ru_func_exact_stem_weka
+      tuning: ru_func_exact_stem_weka
+  ru_exact_weka:
+    funcWords:  $METEOR/resources/function/russian.words
+    paraphrase: $METEOR/data/paraphrase-ru.gz
+    stem: yes
+    normalization: yes
+    models:
+      evaluation: ru_exact_weka
+      tuning: ru_exact_weka
+
+################### Other training configurations ############################
+
+  other_exact_weka:
+    funcWords:  $METEOR/resources/function/other.words
+    models:
+      evaluation: other_exact_weka
+      tuning: other_exact_weka
+
+  other_func_exact_stem_weka:
+    funcWords:  $METEOR/resources/function/other.words
+    stem: yes
+    models:
+      evaluation: other_func_exact_stem_weka
+      tuning: other_func_exact_stem_weka
+      
+  other_func_exact_para_weka:
+    funcWords:  $METEOR/resources/function/other.words
+    paraphrase: $METEOR/data/paraphrase-other_para.gz
+    models:
+      evaluation: other_func_exact_para_weka
+      tuning: other_func_exact_para_weka
+      
+  other_func_exact_para_stem_weka:
+    funcWords:  $METEOR/resources/function/other.words
+    paraphrase: $METEOR/data/paraphrase-other_para_stem.gz
+    stem: yes
+    models:
+      evaluation: other_func_exact_para_stem_weka
+      tuning: other_func_exact_para_stem_weka
