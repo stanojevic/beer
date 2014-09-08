@@ -87,7 +87,7 @@ object FactoredScores {
     
     var recordsReadIn = 0
     
-    for(line <- Source.fromFile(fn).getLines()){
+    for(line <- Source.fromFile(fn, "UTF-8").getLines()){
       line match {
         case evaluationRx(index) =>
           currEvalId = index.toInt

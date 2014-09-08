@@ -3,8 +3,16 @@ import scala.io.Source
 import java.io.File
 import beer.io.FactoredScores.EvalRecord
 import beer.io.FactoredScores
+import java.nio.charset.StandardCharsets
+import java.nio.charset.CodingErrorAction
+import java.io.InputStreamReader
 
 object Evaluation {
+  
+  // private val charsetDecoder = StandardCharsets.UTF_8.newDecoder();
+  // charsetDecoder.onMalformedInput(CodingErrorAction.IGNORE);
+  // private val stdinReader = new InputStreamReader(System.in, charsetDecoder);
+
 
   def main(args:Array[String]) : Unit = {
     
@@ -26,7 +34,7 @@ object Evaluation {
   
   private def readParallelSentencesFromManyFiles(files:List[String]) : List[List[String]] = {
     files.map{ file =>
-      Source.fromFile(file).getLines().toList
+      Source.fromFile(file, "UTF-8").getLines().toList
     }.transpose
   }
   
@@ -39,7 +47,7 @@ object Evaluation {
     var allAvgRefLens = List[Double]()
     
     (sys::refs).map{ case file =>
-      Source.fromFile(file).getLines().toList
+      Source.fromFile(file, "UTF-8").getLines().toList
     }.transpose.foreach{ case lines =>
       val sys = lines.head
       val refs = lines.tail
@@ -110,7 +118,7 @@ object Evaluation {
   private def interactive(beer:BEER) : Unit = {
     System.err.println("Ready for interacitve mode")
     System.err.println("Shoot!")
-    for (ln <- Source.stdin.getLines){
+    for (ln <- Source.fromInputStream(System.in, "UTF-8").getLines){
       val fields = ln split """ \|\|\| """
       fields(0) match{
         case "EVAL BEST" =>

@@ -5,9 +5,15 @@ if [ ! -d "$METEOR_DIR" ]; then
   echo "METEOR is not present in the installation of BEER at the moment"
   echo "Don't worry, I will install it for you now"
   cd lib
-  wget http://www.cs.cmu.edu/~alavie/METEOR/download/meteor-1.5.tar.gz
-  tar xfz meteor*.tar.gz
-  rm meteor*.tar.gz
+  METEOR_LINK="http://www.cs.cmu.edu/~alavie/METEOR/download/meteor-1.5.tar.gz"
+  METEOR_TAR_GZ="meteor-1.5.tar.gz"
+  if hash curl 2>/dev/null; then
+    curl -l $METEOR_LINK > $METEOR_TAR_GZ
+  else
+    wget $METEOR_LINK -O $METEOR_TAR_GZ
+  fi
+  tar xfz $METEOR_TAR_GZ
+  rm $METEOR_TAR_GZ
   cd ..
 fi
 BEER_HOME=`dirname $0`

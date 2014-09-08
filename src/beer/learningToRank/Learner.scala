@@ -57,7 +57,7 @@ trait Learner {
   }
       
   private def loadMapping(fn:String) : Map[String, Int] = 
-    Source.fromFile(fn).getLines().toList.map{ line =>
+    Source.fromFile(fn, "UTF-8").getLines().toList.map{ line =>
       val fields = line split " "
       (fields(0), fields(1).toInt)
     }.toMap
