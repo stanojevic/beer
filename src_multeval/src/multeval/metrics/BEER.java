@@ -23,7 +23,7 @@ public class BEER extends Metric<BEERStats>{
     @Option(shortName = "l", longName = "beer.language", usage = "language code of a supported BEER language (e.g. 'en')", required = true)
 	String language;
 	
-    @Option(shortName = "n", longName = "beer.norm", usage = "should the input be normalized (tokenized)", defaultValue = "true")
+    @Option(shortName = "n", longName = "beer.norm", usage = "should the input be normalized (tokenized)", defaultValue = "false")
 	boolean norm;
 	
     @Option(shortName = "u", longName = "beer.lowercase", usage = "should the input be lowercased", defaultValue = "true")
@@ -51,8 +51,8 @@ public class BEER extends Metric<BEERStats>{
     
     private String createArguments(){
     	String normPart = "";
-    	if(!norm){
-    		normPart = "--noNorm";
+    	if(norm){
+    		normPart = "--norm";
          	normPart += " ";
     	}
     	

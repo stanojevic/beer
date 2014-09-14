@@ -8,6 +8,15 @@ import beer.ingredients.IngredientsFactory
 import beer.alignment.AlignerFactory
 import java.io.File
 import beer.io.Log
+import beer.permutation.finders.MeteorAlignmentToPermutation
+import beer.permutation.metric.scorers.PETscoreFacade
+import beer.permutation.metric.scorers.Kendall
+import beer.permutation.metric.scorers.Hamming
+import beer.permutation.metric.scorers.Spearman
+import beer.permutation.metric.scorers.Ulam
+import beer.permutation.metric.scorers.FuzzyScore
+import beer.permutation.metric.lexical.Fscore
+import beer.permutation.metric.lexical.BLEU
 
 class BEER (val arguments:String, val beerHome:String, val configurationFile:String){
   
@@ -22,6 +31,7 @@ class BEER (val arguments:String, val beerHome:String, val configurationFile:Str
   private val factoredMetric : SentencePair=>Map[String, Double] = composeMetric(conf)
   
   /////////////////////////// initialization ///////////////////////////
+  
   
   private def loadAligner(conf:Configuration) : Aligner = {
     val alignerClassName = conf.modelConfig("aligner").asInstanceOf[Map[String, Object]]("class").toString
@@ -110,6 +120,57 @@ class BEER (val arguments:String, val beerHome:String, val configurationFile:Str
     val alignment = aligner.align(sys, ref)
     val factors = factoredMetric(alignment)
     factors
+  }
+
+  /**
+   * @param metricName reordering metric that will be used
+   *        one of: PEFrecursive, PETrecursiveViterbi, PEFsize, PETarity, PETsize, Kendall, Hamming, Spearman, Ulam, Fuzzy
+   * @param alpha default=0.5 the weight of the lexical part
+   * @param beta default=0.6 used only for recursive PET and PEF metrics
+   * 
+   */
+  def reorderingScore(sys:String, ref:String, metricName:String, alpha:Double=0.5, beta:Double = 0.6) : Double = {
+    val alignment   = aligner.align(sys, ref)
+    val unalignedStrategy = "ignore and normalize"
+    val permutation = MeteorAlignmentToPermutation.convertMeteorToPermutation(unalignedStrategy, alignment)
+    
+    val uncheckedLexical = new Fscore().score(alignment.ref, alignment.sys)
+    val lexical = if(uncheckedLexical.isNaN) 0 else uncheckedLexical
+
+    val uncheckedOrdering = metricName match {
+      case "PEFrecursive" =>
+        PETscoreFacade.evaluatePEF(beta, permutation)
+      case "PETrecursiveViterbi" =>
+        PETscoreFacade.evaluatePETviterbi(beta, permutation)
+      case "PEFsize" =>
+        PETscoreFacade.evaluatePETcountRatio(permutation)
+      case "PETarity" =>
+        PETscoreFacade.evaluatePETavgArity(permutation)
+      case "PETsize" =>
+        PETscoreFacade.evaluatePETnodeCount(permutation)
+      case "Kendall" =>
+        Kendall.evaluate(permutation)
+      case "Hamming" =>
+        Hamming.evaluate(permutation)
+      case "Spearman" =>
+        Spearman.evaluate(permutation)
+      case "Ulam" =>
+        Ulam.evaluate(permutation)
+      case "Fuzzy" =>
+        FuzzyScore.evaluate(permutation)
+      case _ =>
+        System.err.println(s"reordering metric $metricName is not supported")
+        System.exit(-1)
+        0.0
+    }
+    
+    val ordering = if(uncheckedOrdering.isNaN) 0 else uncheckedOrdering
+    
+    val bp = BLEU.brevityPenalty(alignment.ref.size, permutation.size)
+    
+    val score = alpha*lexical + (1-alpha)*bp*ordering
+    
+    score
   }
   
   def factorsAndTokens(sys:String, ref:String):(Map[String, Double], List[String], List[String]) = {

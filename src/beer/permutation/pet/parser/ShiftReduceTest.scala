@@ -26,4 +26,18 @@ class ShiftReduceTest extends FlatSpec with ShouldMatchers {
     pet should equal (correctPet)
   }
 
+  "for small permutation" should "return correct tree" in {
+    // scalastyle:off
+    val p = List(2, 1, 3)
+    val correctPet = NonTerm(1, 3, 1, 3, List(1,2), List(
+                       NonTerm(1, 2, 1, 2, List(2,1), List(
+                           Term(1, 2),
+                           Term(2, 1))),
+                       Term(3, 3)))
+    // scalastyle:on
+
+    val pet = ShiftReduce.parse(p)
+    pet should equal (correctPet)
+  }
+
 }

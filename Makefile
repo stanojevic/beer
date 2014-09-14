@@ -82,6 +82,7 @@ dist: jar multeval models
 	cp -r beer*.jar              $(BEER_DESTINATION)
 	cp -r beer                   $(BEER_DESTINATION)
 	cp -r multeval               $(BEER_DESTINATION)
+	cp -r README.md              $(BEER_DESTINATION)
 	cp -r configuration.yaml     $(BEER_DESTINATION)
 	mkdir $(BEER_DESTINATION)/$(LIB)
 	for X in `ls $(LIB) -1 | grep -v meteor`; do echo "copying $$X" ; cp -r $(LIB)/$$X $(BEER_DESTINATION)/$(LIB) ; done

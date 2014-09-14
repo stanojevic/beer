@@ -46,6 +46,20 @@ abstract class TreeNode extends Traversable[TreeNode]{
     "  "*depth + s"$nodeDesc <$opDesc>\n$childrenDesc"
   }
 }
-case class NonTerm(val start:Int, val end:Int, val min:Int, val max:Int, val operator:List[Int], val children:List[TreeNode]) extends TreeNode
-case class Term(val position:Int, val el:Int) extends TreeNode
+case class NonTerm(val start:Int, val end:Int, val min:Int, val max:Int, val operator:List[Int], val children:List[TreeNode]) extends TreeNode {
+
+  override
+  def toString():String = {
+    s"NonTerm($start..$end <$operator>)"
+  }
+
+}
+
+case class Term(val position:Int, val el:Int) extends TreeNode {
+
+  override
+  def toString():String = {
+    s"NonTerm($el)"
+  }
+}
 

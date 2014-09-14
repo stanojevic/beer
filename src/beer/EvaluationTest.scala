@@ -6,6 +6,18 @@ import java.io.FileOutputStream
 
 class EvaluationTest extends FlatSpec with ShouldMatchers {
   
+  "testing reording metric PEF" should "not crash" in {
+
+    val modelType = "evaluation"
+    val workingMode = "evaluateReordering"
+    val system = "/home/milos/multeval/newstest2014.PROMT-Hybrid.3080.en-ru_modified1"
+    val reorderingMetric = "PEFrecursive"
+    val reference = "/home/milos/multeval/newstest2014-ref.en-ru"
+    val lang = "ur"
+    val arg = s"-l $lang --modelType $modelType -s $system -r $reference --workingMode $workingMode --reorderingMetric $reorderingMetric --printSentScores"
+    Evaluation.main(arg split " ")
+  }
+  
   "testing sign testing" should "not crash" in {
     val modelType = "evaluation"
     val workingMode = "signTest"
@@ -25,7 +37,6 @@ class EvaluationTest extends FlatSpec with ShouldMatchers {
       
     //val arg = s"-l $lang --modelType $modelType --system1Files $system1:$system2:$system3 --system2Files $system4:$system5:$system6 -r $reference --workingMode $workingMode"
     val arg = s"-l $lang --modelType $modelType --system1Files $system1 --system2Files $system7 -r $reference --workingMode $workingMode"
-    System.err.println(s"ARGUMENTS $arg")
     //Evaluation.main(arg split " ")
   }
 
@@ -39,12 +50,12 @@ class EvaluationTest extends FlatSpec with ShouldMatchers {
     val referenceFile = "data/game/SENTENCE_LEVEL_REFERENCE"
     val winnerFile  = "data/game/SENTENCE_LEVEL_WINNER"
     val argWinner = s"-l $lang --modelType $modelType -s $winnerFile -r $referenceFile --workingMode $workingMode"
-    Evaluation.main(argWinner split " ")
+    // Evaluation.main(argWinner split " ")
 
     println("Evaluating loser")
     val loserFile   = "data/game/SENTENCE_LEVEL_LOSER"
     val argLoser = s"-l $lang --modelType $modelType -s $loserFile -r $referenceFile --workingMode $workingMode"
-    Evaluation.main(argLoser split " ")
+    // Evaluation.main(argLoser split " ")
 
     val system1 = "data/en-ru/newstest2014.PROMT-Rule-based.3081.en-ru"
     val system2 = "data/en-ru/newstest2014.rbmt1.0.en-ru"

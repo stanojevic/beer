@@ -6,13 +6,10 @@ import beer.io.FactoredScores
 import java.nio.charset.StandardCharsets
 import java.nio.charset.CodingErrorAction
 import java.io.InputStreamReader
+import beer.io.Log
 
 object Evaluation {
   
-  // private val charsetDecoder = StandardCharsets.UTF_8.newDecoder();
-  // charsetDecoder.onMalformedInput(CodingErrorAction.IGNORE);
-  // private val stdinReader = new InputStreamReader(System.in, charsetDecoder);
-
 
   def main(args:Array[String]) : Unit = {
     
@@ -24,12 +21,61 @@ object Evaluation {
       case "interactive" => interactive(beer)
       case "factors" => evaluate(beer, false)
       case "evaluate" | "evaluation" => evaluate(beer, true)
+      case "evaluateReordering" | "evaluationReordering" => evaluateReordering(beer)
       case "train" => train(beer)
       case x =>
         System.err.println(s"Value $x is not supported as workingMode parameter")
         System.exit(-1)
     }
 
+  }
+  
+  private def evaluateReordering(beer:BEER) : Unit = {
+    val refs = beer.conf.arguments.referenceFiles
+    val sys  = beer.conf.arguments.systemFile
+    
+    var allSentScores = List[Double]()
+    var allAvgRefLens = List[Double]()
+    
+    val metricName = beer.conf.arguments.reorderingMetric 
+    Log.println(beer.conf, s"evaluating with $metricName")
+    
+    var numOfSents = -1
+    (sys::refs).map{ case file =>
+      val listOfSents = Source.fromFile(file, "UTF-8").getLines().toList
+      val n = listOfSents.size
+      if(numOfSents < 0){
+        numOfSents = n
+      }else if(numOfSents != n){
+        System.err.println("ERROR: Number of system and reference sentences is not the same")
+        System.exit(-1)
+      }
+      listOfSents
+    }.transpose.foreach{ case lines =>
+      val sys = lines.head
+      val refs = lines.tail
+      var max = Double.MinValue
+      var scoresAllRefs = List[Double]()
+
+      allAvgRefLens ::= refs.map{_.split(" +").size}.sum/refs.size // with words
+      // allAvgRefLens ::= refs.map{_.length}.sum/refs.size // with characters
+
+      var sysToken = ""
+      var refsToken = List[String]()
+      for(ref <- refs){
+        val score = beer.reorderingScore(sys, ref, metricName)
+        scoresAllRefs ::= score
+      }
+      val maxScore = scoresAllRefs.max
+      allSentScores ::= maxScore
+
+      if(beer.conf.arguments.printSentScores){
+        println(s"best $metricName     : "+maxScore)
+      }
+    }
+    val n = allSentScores.size
+    val corpusScore = (allAvgRefLens zip allSentScores).map{case (len, score) => len*score}.sum/allAvgRefLens.sum
+    println(s"corpus $metricName        : $corpusScore")
   }
   
   private def readParallelSentencesFromManyFiles(files:List[String]) : List[List[String]] = {
@@ -46,8 +92,17 @@ object Evaluation {
     var allSentFeatures = List[Map[String, Double]]()
     var allAvgRefLens = List[Double]()
     
+    var numOfSents = -1
     (sys::refs).map{ case file =>
-      Source.fromFile(file, "UTF-8").getLines().toList
+      val listOfSents = Source.fromFile(file, "UTF-8").getLines().toList
+      val n = listOfSents.size
+      if(numOfSents < 0){
+        numOfSents = n
+      }else if(numOfSents != n){
+        System.err.println("ERROR: Number of system and reference sentences is not the same")
+        System.exit(-1)
+      }
+      listOfSents
     }.transpose.foreach{ case lines =>
       val sys = lines.head
       val refs = lines.tail

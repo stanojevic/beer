@@ -1,10 +1,10 @@
 #!/bin/bash
-#if [ ! -d "$DIRECTORY" ]; then
-METEOR_DIR=`ls lib/meteor* -1d | head -1`
+BEER_HOME=`dirname $0`
+METEOR_DIR=`ls $BEER_HOME/lib/meteor* -1d | head -1`
 if [ ! -d "$METEOR_DIR" ]; then
   echo "METEOR is not present in the installation of BEER at the moment"
   echo "Don't worry, I will install it for you now"
-  cd lib
+  cd $BEER_HOME/lib
   METEOR_LINK="http://www.cs.cmu.edu/~alavie/METEOR/download/meteor-1.5.tar.gz"
   METEOR_TAR_GZ="meteor-1.5.tar.gz"
   if hash curl 2>/dev/null; then
@@ -16,6 +16,5 @@ if [ ! -d "$METEOR_DIR" ]; then
   rm $METEOR_TAR_GZ
   cd ..
 fi
-BEER_HOME=`dirname $0`
 CP=`ls $BEER_HOME/*.jar $BEER_HOME/lib/*.jar $BEER_HOME/lib/meteor*/*.jar -1 | tr "\n" :`
 java -Xmx4G -cp $CP beer.Evaluation $@

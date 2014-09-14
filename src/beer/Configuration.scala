@@ -159,6 +159,7 @@ class Configuration (args:Array[String], beerHome:String, configurationFile:Stri
       meteorHome: String = "",
       beerHome: String = "",
       //tmpDir: String = "",
+      reorderingMetric : String = "NOT_SPECIFIED",
       useLower: Boolean = true,
       useNorm: Boolean = false,
       usePunct: Boolean = true,
@@ -181,17 +182,21 @@ class Configuration (args:Array[String], beerHome:String, configurationFile:Stri
       c.copy(verbose = true)
     } text ("prints to standard error messages potentially useful for debugging beer")
     
+    opt[String]("reorderingMetric") action { (x,c) =>
+      c.copy(reorderingMetric = x)
+    } text ("reordering metric that is going to be used (PEFrecursive, PETrecursiveViterbi, PEFsize, PETarity, PETsize, Kendall, Hamming, Spearman, Ulam, Fuzzy)")
+    
     opt[Unit]("printSentScores") action { (_,c) =>
       c.copy(printSentScores = true)
-    } text ("stops printing of sentence scores (together with feature values)")
+    } text ("print sentence scores (together with feature values)")
     
     opt[Unit]("printFeatureValues") action { (_,c) =>
       c.copy(printFeatureValues = true)
-    } text ("stops printing of feature values")
+    } text ("print feature values for each sentence")
     
     opt[String]("workingMode") valueName ("mode") action { (x,c) =>
       c.copy(workingMode = x)
-    } text ("what to do : evaluation (default), factors, interactive, train, permutationScoring")
+    } text ("what to do : evaluation (default), factors, interactive, train, evaluateReordering, permutationScoring")
     
     opt[String]("meteorHome") valueName ("/meteor/home") action { (x,c) =>
       c.copy(meteorHome = x)
@@ -243,7 +248,7 @@ class Configuration (args:Array[String], beerHome:String, configurationFile:Stri
     
     opt[String]('l', "lang") valueName ("lang") action { (x,c) =>
       c.copy(lang = x)
-    } text ("target language (en, fr, cs, de, es, ru, da, fi, hu, it, nl, no, pt, ro, se, tr, other)") required
+    } text ("target language (en, fr, cs, de, es, ru, da, fi, hu, it, nl, no, pt, ro, se, tr, ur, other)") required
     
   }
   
