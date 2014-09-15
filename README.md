@@ -27,11 +27,11 @@ and afterwords download meteor and extract it in the lib directory.
 
 ## Full evaluation metric
 
-The necessary parameters are:
+The available parameters are:
 
 Parameter  | Description
 ------------- | -------------
--l                                 | language (supported: en, fr, cs, de, es, ru, da, fi, hu, it, nl, no, pt, ro, se, tr, ur, other)
+-l                                 | (required parameter) evaluated language (supported: en, fr, cs, de, es, ru, da, fi, hu, it, nl, no, pt, ro, se, tr, ur, other)
 -s                                | system translation
 -r                                | reference files separated by column :
 --noPunct                    | do not use punctuation before evaluation
