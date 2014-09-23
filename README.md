@@ -74,7 +74,7 @@ BEER is distributed with the extended version of multeval that supports BEER. Th
 
     $BEER_HOME/multeval --beer.language en ...all the standard multeval params...
 
-## (pre)-ordering evaluation metric
+## (pre-)ordering evaluation metric
 
 BEER also includes specialized reordering metrics published in [3]. Example usage is:
 

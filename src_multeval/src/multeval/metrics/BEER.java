@@ -93,7 +93,7 @@ public class BEER extends Metric<BEERStats>{
 		double score = scorer.evaluateCorpus(
 				JavaConversions.asScalaBuffer(suffStats.importances).toList(),
 				JavaConversions.asScalaBuffer(suffStats.sentStats).toList());
-		return score*1000;
+		return score*100;
 	}
 
 	@Override
