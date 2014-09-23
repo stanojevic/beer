@@ -41,6 +41,7 @@ Parameter  | Description
 --printFeatureValues | prints values of all features for each sentence
 --printSentScores      | prints score for each sentence
 --reorderingMetric      | choose reordering metric (excludes full evaluation!) ; available: PEFrecursive, PETrecursiveViterbi, PEFsize, PETarity, PETsize, Kendall, Hamming, Spearman, Ulam, Fuzzy
+--alpha                 | parameter that gives importance to the lexical scoring in the reordering metric (default is 0)
 --verbose                    | prints additional, possibly helpful, messages on stderr
 --version                     | prints current version
 --help                          | prints available options
@@ -73,11 +74,23 @@ BEER is distributed with the extended version of multeval that supports BEER. Th
 
     $BEER_HOME/multeval --beer.language en ...all the standard multeval params...
 
-## Reordering evaluation metric
+## (pre)-ordering evaluation metric
 
 BEER also includes specialized reordering metrics published in [3]. Example usage is:
 
     $BEER_HOME/beer  --workingMode evaluateReordering --reorderingMetric PEFrecursive -l en -s system.en -r reference.en
+
+Here system.en and reference.en should differ only in word order.
+If that is not the case then you need to add some importance to the lexical part (F1 score).
+That is balanced with the parameter --alpha which is by default 0 (ignores lexical translation).
+The reason for that is that this reordering metric is meant to be used only for measuring the quality of preordering.
+
+## IMPORTANT - How to report the results
+
+If you use BEER as an MT evaluation metric in your research please cite [1].
+
+If you use the part of BEER that is made only for measuring the quality of preordering cite [3]
+and mention exactly the value of alpha parameter and the word order metric used (e.g. PEFrecursive )    
 
 ## Parser and Visualizer
 

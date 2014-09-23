@@ -158,6 +158,7 @@ class Configuration (args:Array[String], beerHome:String, configurationFile:Stri
       lang: String = "other",
       meteorHome: String = "",
       beerHome: String = "",
+      alpha: Double = 0.0,
       //tmpDir: String = "",
       reorderingMetric : String = "NOT_SPECIFIED",
       useLower: Boolean = true,
@@ -185,6 +186,10 @@ class Configuration (args:Array[String], beerHome:String, configurationFile:Stri
     opt[String]("reorderingMetric") action { (x,c) =>
       c.copy(reorderingMetric = x)
     } text ("reordering metric that is going to be used (PEFrecursive, PETrecursiveViterbi, PEFsize, PETarity, PETsize, Kendall, Hamming, Spearman, Ulam, Fuzzy)")
+    
+    opt[Double]("alpha") action { (x,c) =>
+      c.copy(alpha = x)
+    } text ("parameter that gives importance to the lexical scoring in the reordering metric (default is 0)")
     
     opt[Unit]("printSentScores") action { (_,c) =>
       c.copy(printSentScores = true)

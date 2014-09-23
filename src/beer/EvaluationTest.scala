@@ -15,6 +15,28 @@ class EvaluationTest extends FlatSpec with ShouldMatchers {
     val reference = "/home/milos/multeval/newstest2014-ref.en-ru"
     val lang = "ur"
     val arg = s"-l $lang --modelType $modelType -s $system -r $reference --workingMode $workingMode --reorderingMetric $reorderingMetric --printSentScores"
+    // Evaluation.main(arg split " ")
+  }
+  
+  "testing metric on sent level" should "not crash" in {
+
+    val modelType = "evaluation"
+    val workingMode = "evaluation"
+    val system = "data/en-ru/newstest2014.onlineA.0.en-ru"
+    val reference = "/home/milos/multeval/newstest2014-ref.en-ru"
+    val lang = "ur"
+    val arg = s"-l $lang --modelType $modelType -s $system -r $reference --workingMode $workingMode --printSentScores"
+    Evaluation.main(arg split " ")
+  }
+  
+  "testing metric on corp level" should "not crash" in {
+
+    val modelType = "evaluation"
+    val workingMode = "evaluation"
+    val system = "data/en-ru/newstest2014.rbmt1.0.en-ru"
+    val reference = "/home/milos/multeval/newstest2014-ref.en-ru"
+    val lang = "ur"
+    val arg = s"-l $lang --modelType $modelType -s $system -r $reference --workingMode $workingMode"
     Evaluation.main(arg split " ")
   }
   

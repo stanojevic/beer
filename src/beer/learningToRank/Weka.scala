@@ -3,11 +3,11 @@ package beer.learningToRank
 import beer.Configuration
 import java.io.{ ObjectOutputStream, FileOutputStream }
 import weka.classifiers.{ Classifier => WekaClassifier }
-import weka.core.{Instance, SparseInstance, Instances,
+import weka.core.{Instance, DenseInstance, SparseInstance, Instances,
                   FastVector, Attribute }
 import beer.io.Log
 
-class Weka(configuration:Configuration) extends Learner {
+class Weka(configuration:Configuration) extends Learner with PRO {
   
   private val wekaClassName:String = configuration.modelConfig("brewer").asInstanceOf[Map[String, Object]]("params").asInstanceOf[Map[String, String]]("classifier")
   
@@ -43,7 +43,7 @@ class Weka(configuration:Configuration) extends Learner {
     val instances = standardDataSetFormat()
 
     val sparseData = data.flatMap{ case (winnerRawFeatures, loserRawFeatures, weight) =>
-      val rawInstances = PROextractor.onePair(winnerRawFeatures, loserRawFeatures)
+      val rawInstances = extractOneTrainingPair(winnerRawFeatures, loserRawFeatures)
       
       rawInstances.map{ rawInstance =>
         val instance = new SparseInstance(instanceSize)
@@ -89,9 +89,9 @@ class Weka(configuration:Configuration) extends Learner {
   private def convertToInstance(features:Map[Int, Double]) : Instance = {
     val instanceSize = featureMapping.size+1
     //val instanceSize = features.size+1
-    val instance = new SparseInstance(instanceSize)
-
-    features.foreach{ case (fId:Int, value:Double) =>
+    val instance = new DenseInstance(instanceSize)
+    
+    features.toList.sortBy(_._1).foreach{ case (fId:Int, value:Double) =>
       instance.setValueSparse(fId, value)
     }
     

@@ -17,6 +17,7 @@ import beer.permutation.metric.scorers.Ulam
 import beer.permutation.metric.scorers.FuzzyScore
 import beer.permutation.metric.lexical.Fscore
 import beer.permutation.metric.lexical.BLEU
+import beer.learningToRank.PRO
 
 class BEER (val arguments:String, val beerHome:String, val configurationFile:String){
   
@@ -78,13 +79,23 @@ class BEER (val arguments:String, val beerHome:String, val configurationFile:Str
   }
   
   private def evaluateCorpusAvgSent(weights:List[Double], allFactors:List[Map[String, Double]]) : Double = {
+    allFactors.map{evaluate}.sum/allFactors.size
+  }
+  
+  private def evaluateCorpusWeightedAvgSent(weights:List[Double], allFactors:List[Map[String, Double]]) : Double = {
     val total = weights.sum
     val scaledWeights = weights map {_/total}
     (scaledWeights zip allFactors).map{case (weight, factors) => weight * evaluate(factors)}.sum
   }
 
-  def evaluateCorpus(weights:List[Double], allFactors:List[Map[String, Double]]) : Double = evaluateCorpusAggregate(weights, allFactors)
-  
+  private def evaluateCorpusLogProduct(weights:List[Double], allFactors:List[Map[String, Double]]) : Double = {
+    val total = weights.sum
+    val scaledWeights = weights map {_/total}
+    val logScore = (scaledWeights zip allFactors).map{case (weight, factors) => Math.log(evaluate(factors))}.sum
+    // Math.exp(logScore)
+    logScore
+  }
+
   private def evaluateCorpusAggregate(weights:List[Double], allFactors:List[Map[String, Double]]) : Double = {
     val total = weights.sum
     val scaledWeights = weights map {_/total}
@@ -98,15 +109,18 @@ class BEER (val arguments:String, val beerHome:String, val configurationFile:Str
     evaluate(totalFactors)
   }
 
+  def evaluateCorpus(weights:List[Double], allFactors:List[Map[String, Double]]) : Double = evaluateCorpusAvgSent(weights, allFactors)
+  
   def evaluate(sys:String, ref:String) : Double = {
-    val the_factors = factors(sys, ref)
-    val score = model.scoreInstance(the_factors)
-    score
+    evaluate( factors( sys, ref ) )
   }
   
   def evaluate(factors:Map[String, Double]) : Double = {
-    val score = model.scoreInstance(factors)
-    score
+    if(model.isInstanceOf[PRO]){
+      model.scoreInstance(factors)*2
+    }else{
+      model.scoreInstance(factors)
+    }
   }
   
   private def combinations(n:Int, k:Int) : Int = {
@@ -117,9 +131,30 @@ class BEER (val arguments:String, val beerHome:String, val configurationFile:Str
   }
   
   def factors(sys:String, ref:String):Map[String, Double] = {
+    factorsAndTokens(sys, ref)._1
+  }
+
+  def factorsAndTokens(sys:String, ref:String):(Map[String, Double], List[String], List[String]) = {
+    
+    val (realFactors,       realSysTokenization, realRefTokenization) = directFactorsAndTokens(sys, ref)
+
+    val factors = if(model.isInstanceOf[PRO]){
+                    val (upperBoundFactors, _ , _ ) = directFactorsAndTokens(ref, ref)
+                    val keys:Set[String] = realFactors.keySet ++ upperBoundFactors.keySet
+                    keys.map{fName:String =>
+                      (fName, realFactors.getOrElse(fName, 0.0) - upperBoundFactors.getOrElse(fName, 0.0))
+                    }.toMap
+                  }else{
+                    realFactors
+                  }
+    
+    (factors, realSysTokenization, realRefTokenization)
+  }
+  
+  def directFactorsAndTokens(sys:String, ref:String):(Map[String, Double], List[String], List[String]) = {
     val alignment = aligner.align(sys, ref)
     val factors = factoredMetric(alignment)
-    factors
+    (factors, alignment.sys, alignment.ref)
   }
 
   /**
@@ -173,12 +208,6 @@ class BEER (val arguments:String, val beerHome:String, val configurationFile:Str
     score
   }
   
-  def factorsAndTokens(sys:String, ref:String):(Map[String, Double], List[String], List[String]) = {
-    val alignment = aligner.align(sys, ref)
-    val factors = factoredMetric(alignment)
-    (factors, alignment.sys, alignment.ref)
-  }
-  
   def train(
       labeledData   : List[(Map[String, Double], Map[String, Double])],
       unlabeledData : List[(Map[String, Double], Map[String, Double])],
@@ -197,8 +226,8 @@ class BEER (val arguments:String, val beerHome:String, val configurationFile:Str
     for(iteration <- 1 to unsupervisedIterations) {
 
       val poorlyWeightedUnlabeledData = unlabeledData.map{ case (first, second) =>
-        val firstScore = model.scoreInstance(first)
-        val secondScore = model.scoreInstance(second)
+        val firstScore = evaluate(first)
+        val secondScore = evaluate(second)
         if(firstScore > secondScore){
           (first, second, firstScore-secondScore)
         }else{

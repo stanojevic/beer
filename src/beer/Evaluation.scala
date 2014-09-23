@@ -60,10 +60,11 @@ object Evaluation {
       allAvgRefLens ::= refs.map{_.split(" +").size}.sum/refs.size // with words
       // allAvgRefLens ::= refs.map{_.length}.sum/refs.size // with characters
 
+      val alpha = beer.conf.arguments.alpha
       var sysToken = ""
       var refsToken = List[String]()
       for(ref <- refs){
-        val score = beer.reorderingScore(sys, ref, metricName)
+        val score = beer.reorderingScore(sys, ref, metricName, alpha)
         scoresAllRefs ::= score
       }
       val maxScore = scoresAllRefs.max
@@ -116,7 +117,8 @@ object Evaluation {
       var sysToken = ""
       var refsToken = List[String]()
       for(ref <- refs){
-        val (factors, sysTokenized, refTokenized) = beer.factorsAndTokens(sys, ref)
+        val (sysFactors, sysTokenized, refTokenized) = beer.factorsAndTokens(sys, ref)
+        val factors = sysFactors
         sysToken = sysTokenized.mkString(" ")
         refsToken ::= refTokenized.mkString(" ")
         featuresAllRefs ::= factors

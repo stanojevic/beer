@@ -1,15 +1,13 @@
 package beer.learningToRank
 
-object PROextractor {
+trait PRO {
 
-  type Features = Map[Int, Double]
-
-  def extractInstances(winners: List[Features], losers: List[Features]): List[(Features, Boolean)] = 
+  private def extractInstances(winners: List[Map[Int, Double]], losers: List[Map[Int, Double]]): List[(Map[Int, Double], Boolean)] = 
     winners zip losers flatMap { case (winner, loser) =>
-      onePair(winner, loser)
+      extractOneTrainingPair(winner, loser)
     }
 
-  def onePair(winner: Features, loser: Features): List[(Features, Boolean)] = {
+  def extractOneTrainingPair(winner: Map[Int, Double], loser: Map[Int, Double]): List[(Map[Int, Double], Boolean)] = {
     val featureNames = (winner.keys ++ loser.keys).toSet
 
     val positiveInstance = featureNames.map {
