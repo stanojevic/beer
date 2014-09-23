@@ -85,7 +85,7 @@ If that is not the case then you need to add some importance to the lexical part
 That is balanced with the parameter --alpha which is by default 0 (ignores lexical translation).
 The reason for that is that this reordering metric is meant to be used only for measuring the quality of preordering.
 
-## IMPORTANT - How to report the results
+## How to report the results
 
 If you use BEER as an MT evaluation metric in your research please cite [1].
 
