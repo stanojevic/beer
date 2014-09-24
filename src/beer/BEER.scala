@@ -133,7 +133,7 @@ class BEER (val arguments:String, val beerHome:String, val configurationFile:Str
   def factors(sys:String, ref:String):Map[String, Double] = {
     factorsAndTokens(sys, ref)._1
   }
-
+  
   def factorsAndTokens(sys:String, ref:String):(Map[String, Double], List[String], List[String]) = {
     
     val (realFactors,       realSysTokenization, realRefTokenization) = directFactorsAndTokens(sys, ref)
@@ -207,6 +207,23 @@ class BEER (val arguments:String, val beerHome:String, val configurationFile:Str
     
     score
   }
+
+  // used only for training
+  // be careful with it because it gives different results
+  // for PRO type of learners and other (possibly non-probabilistic) learners
+  private def probabilityFirstBetterThanSecond(sys1:Map[String, Double], sys2:Map[String, Double]) : Double = {
+    if(model.isInstanceOf[PRO]){
+      val keys:Set[String] = sys1.keySet ++ sys2.keySet
+      val factors = keys.map{fName:String =>
+        (fName, sys1.getOrElse(fName, 0.0) - sys2.getOrElse(fName, 0.0))
+      }.toMap
+      model.scoreInstance(factors)
+    }else{
+      val score1 = model.scoreInstance(sys1)
+      val score2 = model.scoreInstance(sys2)
+      score1/(score1+score2)
+    }
+  }
   
   def train(
       labeledData   : List[(Map[String, Double], Map[String, Double])],
@@ -226,19 +243,19 @@ class BEER (val arguments:String, val beerHome:String, val configurationFile:Str
     for(iteration <- 1 to unsupervisedIterations) {
 
       val poorlyWeightedUnlabeledData = unlabeledData.map{ case (first, second) =>
-        val firstScore = evaluate(first)
-        val secondScore = evaluate(second)
+        val firstScore  = probabilityFirstBetterThanSecond(first , second)
+        val secondScore = probabilityFirstBetterThanSecond(second, first )
         if(firstScore > secondScore){
-          (first, second, firstScore-secondScore)
+          (first, second, firstScore)
         }else{
-          (second, first, secondScore-firstScore)
+          (second, first, secondScore)
         }
       }
       
       val avgWeight = poorlyWeightedUnlabeledData.map{_._3}.sum/poorlyWeightedUnlabeledData.size
       
       val weightedUnlabeledData = poorlyWeightedUnlabeledData.map{ case (win, los, weight) =>
-        (win, los, weight/avgWeight)
+        (win, los, weight/(2*avgWeight))
       }
       
       val trainingData = weightedLabeledData++weightedUnlabeledData

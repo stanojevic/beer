@@ -1,5 +1,5 @@
 #!/bin/bash
-BEER_HOME=`dirname $0`
+BEER_HOME=`dirname $0`/
 METEOR_DIR=`ls $BEER_HOME/lib/meteor* -1d | head -1`
 if [ ! -d "$METEOR_DIR" ]; then
   echo "METEOR is not present in the installation of BEER at the moment"
