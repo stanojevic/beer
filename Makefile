@@ -99,7 +99,7 @@ dist: jar multeval models
 	chmod o+rw -R dist
 
 deploy: dist
-	scp -p dist/* mstanoj1@staff.fnwi.uva.nl:/data/mstanoj1/beer_download_files/
+	scp -p dist/* mstanoj1@staff.fnwi.uva.nl:/data/mstanoj1/WWW/beer/
 
 models: jar
 #nohup ./scripts/train.pl > std.log 2> err.log

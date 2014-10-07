@@ -12,14 +12,14 @@ BEER is trained a machine translation evaluation metric which puts special atten
 
 BEER 1.0 includes all its dependencies in the tar.gz file except METEOR. METEOR will be downloaded on the first run of BEER. Basic installation commands on a standard Unix terminal could be as follows:
 
-    wget https://staff.fnwi.uva.nl/m.stanojevic/beer?version=1.0 -O beer.tar.gz
+    wget https://staff.fnwi.uva.nl/m.stanojevic/beer/beer_1.0.tar.gz
     tar xfvz beer.tar.gz
     ./beer_1.0/beer
     rm beer.tar.gz
 
 After these commands the directory `beer_1.0` will contain all the necessary files. Even though this installation requires bash, BEER can run on Windows too. User can download BEER directly from the following link:
 
-[BEER 1.0](https://staff.fnwi.uva.nl/m.stanojevic/beer?version=1.0)
+[BEER 1.0](https://staff.fnwi.uva.nl/m.stanojevic/beer/beer_1.0.tar.gz)
 
 and afterwords download meteor and extract it in the lib directory.
 
