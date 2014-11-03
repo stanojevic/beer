@@ -14,7 +14,7 @@ if [ ! -d "$METEOR_DIR" ]; then
   fi
   tar xfz $METEOR_TAR_GZ
   rm $METEOR_TAR_GZ
-  cd ..
+  cd -
 fi
 CP=`ls $BEER_HOME/*.jar $BEER_HOME/lib/*.jar $BEER_HOME/lib/meteor*/*.jar -1 | tr "\n" :`
 java -Xmx4G -cp $CP beer.Evaluation $@

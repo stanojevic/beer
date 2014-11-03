@@ -13,9 +13,9 @@ BEER is trained a machine translation evaluation metric which puts special atten
 BEER 1.0 includes all its dependencies in the tar.gz file except METEOR. METEOR will be downloaded on the first run of BEER. Basic installation commands on a standard Unix terminal could be as follows:
 
     wget https://staff.fnwi.uva.nl/m.stanojevic/beer/beer_1.0.tar.gz
-    tar xfvz beer.tar.gz
+    tar xfvz beer_1.0.tar.gz
     ./beer_1.0/beer
-    rm beer.tar.gz
+    rm beer_1.0.tar.gz
 
 After these commands the directory `beer_1.0` will contain all the necessary files. Even though this installation requires bash, BEER can run on Windows too. User can download BEER directly from the following link:
 
@@ -118,7 +118,7 @@ BEER is published under [GPL v3](http://www.gnu.org/licenses/gpl-3.0.html) licen
 
 Authors
 ----
-Miloš Stanojević and Khalil Sima'an
+[Miloš Stanojević](https://staff.fnwi.uva.nl/m.stanojevic) and [Khalil Sima'an](https://staff.fnwi.uva.nl/k.simaan/)
 
 Institute for Logic, Language and Computation
 
@@ -126,6 +126,6 @@ University of Amsterdam
 
 #References
 
-1. Miloš Stanojević and Khalil Sima’an -- BEER: BEtter Evaluation as Ranking - WMT 2014
-2. Miloš Stanojević and Khalil Sima’an -- Fitting Sentence Level Translation Evaluation with Many Dense Features - EMNLP 2014
-3. Miloš Stanojević and Khalil Sima’an -- Evaluating Word Order Recursively over Permutation-Forests -- SSST 2014
+1. Miloš Stanojević and Khalil Sima’an -- [BEER: BEtter Evaluation as Ranking](http://www.statmt.org/wmt14/pdf/W14-3354.pdf) - WMT 2014
+2. Miloš Stanojević and Khalil Sima’an -- [Fitting Sentence Level Translation Evaluation with Many Dense Features](http://aclweb.org/anthology/D14-1025) - EMNLP 2014
+3. Miloš Stanojević and Khalil Sima’an -- [Evaluating Word Order Recursively over Permutation-Forests](http://aclweb.org/anthology/W/W14/W14-4017.pdf) -- SSST 2014
