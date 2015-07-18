@@ -1,9 +1,17 @@
-#ifndef MERT_BEER_SCORER_H_
-#define MERT_BEER_SCORER_H_
+/*
+ * BeerScorer.h
+ *
+ *  Created on: Mar 23, 2015
+ *      Author: milos
+ */
+
+#ifndef BEERSCORER_H_
+#define BEERSCORER_H_
 
 #include <set>
 #include <string>
 #include <vector>
+#include <time.h>
 
 #ifdef WITH_THREADS
 #include <boost/thread/mutex.hpp>
@@ -12,30 +20,28 @@
 #include "Types.h"
 #include "StatisticsBasedScorer.h"
 
-namespace MosesTuning
-{
+namespace MosesTuning {
 
 class ofdstream;
 class ifdstream;
 class ScoreStats;
 
 /**
- * Beer scoring 
+ * BEER scoring
  *
  * https://github.com/stanojevic/beer
- * http://www.statmt.org/wmt14/pdf/W14-3354.pdf
  *
  * Config:
- * jar - location of beer_*.jar (beer_1.0.jar at time of writing)
- * lang - optional language code (default: other)
- * decimals - optional precision of BEER score (default: 5)
- * modelType - optional model type (default: tuning)
- * otherArguments - optional other arguments
  *
- * Usage with mert-moses.pl:
- * --mertargs="--sctype BEER --scconfig decimals:6 jar:/path/to/beer_1.0.jar lang:ru modelType:evaluation otherArguments:'    '"
+ * beerDir - directory containing beer
+ *
+ * lang - language (default: other)
+ *
+ * modelType - (default: evaluation)
+ *
  */
-class BeerScorer: public StatisticsBasedScorer
+
+class BeerScorer : public StatisticsBasedScorer
 {
 public:
   explicit BeerScorer(const std::string& config = "");
@@ -43,20 +49,35 @@ public:
 
   virtual void setReferenceFiles(const std::vector<std::string>& referenceFiles);
   virtual void prepareStats(std::size_t sid, const std::string& text, ScoreStats& entry);
+  virtual void prepareStats(
+		  std::vector<std::size_t>& sindexs,
+		  std::vector<std::string>& texts,
+          //ScoreDataHandle& score_data
+		  boost::shared_ptr<ScoreData> score_data
+  );
 
   virtual std::size_t NumberOfScores() const {
+    // number of different numbers per evaluated sentence
     return 2;
   }
 
-  virtual float calculateScore(const std::vector<int>& comps) const;
+  virtual float calculateSentenceLevelBackgroundScore(const std::vector<ScoreStatsType>& totals, const std::vector<ScoreStatsType>& bg) {
+	calculateScore(totals);
+  }
+
+  virtual float calculateScore(const std::vector<ScoreStatsType>& comps) const;
 
 private:
-  // Beer and process IO
-  std::string beer_jar;
+  // BEER and process IO
+  int m_processed_sentences_statistics;
+  int m_processed_sentences_scored;
+  int batch_size;
+  time_t startTime;
+
+  std::string beer_dir;
   std::string beer_lang;
   std::string beer_modelType;
-  std::string beer_otherArguments;
-  int beer_decimals;
+  int beer_threads;
   ofdstream* m_to_beer;
   ifdstream* m_from_beer;
 #ifdef WITH_THREADS
@@ -67,14 +88,16 @@ private:
   std::vector<std::string> m_references;
   std::vector<std::vector<std::string> > m_multi_references;
 
+  virtual float getReferenceLength(const std::vector<ScoreStatsType>& totals) const {
+    return totals[1];
+  }
+
   // no copying allowed
   BeerScorer(const BeerScorer&);
   BeerScorer& operator=(const BeerScorer&);
 
 };
 
-float beerScore(const std::vector<float>& stats);
+} /* namespace MosesTuning */
 
-}
-
-#endif // MERT_BEER_SCORER_H_
+#endif /* BEERSCORER_H_ */

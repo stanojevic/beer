@@ -29,6 +29,8 @@ SemposOverlapping.cpp
 InterpolatedScorer.cpp
 Point.cpp
 PerScorer.cpp
+HwcmScorer.cpp
+../moses/FF/InternalTree.cpp
 Scorer.cpp
 ScorerFactory.cpp
 Optimizer.cpp
@@ -66,17 +68,9 @@ exe sentence-bleu : sentence-bleu.cpp mert_lib ;
 
 exe pro : pro.cpp mert_lib ..//boost_program_options ;
 
-exe pro_beer : pro_beer.cpp mert_lib ..//boost_program_options ;
-
 exe kbmira : kbmira.cpp mert_lib ..//boost_program_options ..//boost_filesystem ;
 
-exe kbmira_smooth_bleu : kbmira_smooth_bleu.cpp mert_lib ..//boost_program_options ..//boost_filesystem ;
-
-exe kbmira_bg_bleu : kbmira_bg_bleu.cpp mert_lib ..//boost_program_options ..//boost_filesystem ;
-
-exe kbmira_beer : kbmira_beer.cpp mert_lib ..//boost_program_options ..//boost_filesystem ;
-
-alias programs : mert extractor evaluator pro_beer pro kbmira kbmira_bg_bleu kbmira_smooth_bleu kbmira_beer sentence-bleu ;
+alias programs : mert extractor evaluator pro kbmira sentence-bleu ;
 
 unit-test bleu_scorer_test : BleuScorerTest.cpp mert_lib ..//boost_unit_test_framework ;
 unit-test feature_data_test : FeatureDataTest.cpp mert_lib ..//boost_unit_test_framework ;

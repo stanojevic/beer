@@ -6,10 +6,12 @@ import weka.classifiers.{ Classifier => WekaClassifier }
 import weka.core.{Instance, DenseInstance, SparseInstance, Instances,
                   FastVector, Attribute }
 import beer.io.Log
+import weka.core.OptionHandler
 
 class Weka(configuration:Configuration) extends Learner with PRO {
   
-  private val wekaClassName:String = configuration.modelConfig("brewer").asInstanceOf[Map[String, Object]]("params").asInstanceOf[Map[String, String]]("classifier")
+  private val wekaClassName:String = configuration.modelConfig("brewer").asInstanceOf[Map[String, Object]]("params").asInstanceOf[Map[String, String]]("classifier").trim()
+  private val classifierOptions = configuration.modelConfig("brewer").asInstanceOf[Map[String, Object]]("params").asInstanceOf[Map[String, String]]("classifierParams")
   
   private var classifier : WekaClassifier = null // Class.forName(wekaClassName).getConstructors()(0).newInstance().asInstanceOf[WekaClassifier]
   
@@ -60,12 +62,14 @@ class Weka(configuration:Configuration) extends Learner with PRO {
     sparseData.foreach{ instance => instances.add(instance) }
 
     classifier = Class.forName(wekaClassName).getConstructors()(0).newInstance().asInstanceOf[WekaClassifier]
+    val options = weka.core.Utils.splitOptions(classifierOptions)
+    classifier.asInstanceOf[OptionHandler].setOptions(options)
     classifier.buildClassifier(instances)
   }
   
   protected def save(modelDir:String) : Unit = {
 
-    Log.println(configuration, s"\nLOADING MODEL LOCATED IN $modelDir\n")
+    System.err.println(s"\nSAVING MODEL LOCATED IN $modelDir\n")
 
     val oos = new ObjectOutputStream(new FileOutputStream(s"$modelDir/model"));
     oos.writeObject(classifier);
@@ -75,6 +79,7 @@ class Weka(configuration:Configuration) extends Learner with PRO {
   
   protected def load(modelDir:String) : Unit = {
     classifier = weka.core.SerializationHelper.read(s"$modelDir/model").asInstanceOf[WekaClassifier]
+    // System.err.println(classifier.toString())
   }
   
   protected def classify(features:Map[Int, Double]) : Double = {

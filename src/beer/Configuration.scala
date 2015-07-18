@@ -148,12 +148,14 @@ class Configuration (args:Array[String], beerHome:String, configurationFile:Stri
       workingMode   : String = "evaluation",
       systemFile : String = "",
       referenceFiles : List[String] = List(),
+      caching: Boolean = false,
       debugging : Boolean = false,
       winnerFeaturesFile : String = "",
       modelDescFile : String = "",
       loserFeaturesFile : String = "",
       unlabeledFeatureFile1 : String = "",
       unlabeledFeatureFile2 : String = "",
+      unsupervisedIterations: Int = 0,
       modelType : String = "evaluation",
       lang: String = "other",
       meteorHome: String = "",
@@ -178,6 +180,10 @@ class Configuration (args:Array[String], beerHome:String, configurationFile:Stri
     help("help") text ("prints this usage text")
 
     version("version") text ("prints the current version")
+
+    opt[Unit]("caching") action { (_,c) =>
+      c.copy(caching = true)
+    } text ("cache previously evaluated pairs of sys and ref")
 
     opt[Unit]("verbose") action { (_,c) =>
       c.copy(verbose = true)
@@ -227,6 +233,10 @@ class Configuration (args:Array[String], beerHome:String, configurationFile:Stri
       c.copy(unlabeledFeatureFile2 = x)
     } text ("second file with unlabeled data used for training the metric")
     
+    opt[Int]("unsupervisedIterations") valueName ("0") action { (x,c) =>
+      c.copy(unsupervisedIterations = x)
+    } text ("second file with unlabeled data used for training the metric")
+
     opt[String]("trainingWinnerFeaturesFile") valueName ("file") action { (x,c) =>
       c.copy(winnerFeaturesFile = x)
     } text ("file containing winner features")

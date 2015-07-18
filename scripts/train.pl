@@ -13,14 +13,14 @@ my @langsToUseForTraining  = ("en", "cs", "fr", "de", "es", "ru", "hi");
 
 my @langPairsAvailableForTraining = ("en-cs", "en-fr", "en-de", "en-es", "cs-en", "fr-en", "de-en", "es-en", "en-ru", "ru-en", "hi-en", "en-hi");
 
-my $MAX_PROCESSES = 8;
+my $MAX_PROCESSES = 20;
 
 my $experiments_dir = abs_path(".");
 my $application_dir = abs_path(dirname($0));
 
 
 my $BEER_HOME = "$application_dir/..";
-my $BEER_CMD = "java -Xmx40G -jar $BEER_HOME/beer*.jar";
+my $BEER_CMD = "$BEER_HOME/beer";
 
 my $wmt13    = "$experiments_dir/data/wmt13";
 my $wmt14    = "$experiments_dir/data/wmt14";
@@ -41,13 +41,13 @@ my $readyForTraining = "$experiments_dir/data/collected_features";
 
 my %configTemplates = 
 	(
-	 en => ["func_exact_para_stem_syn"        , "func_exact_para_stem"   , "func_exact_para"   , "func_exact_stem"   , "exact"   ],
-	 fr => [                                    "func_exact_para_stem"   , "func_exact_para"   , "func_exact_stem"   , "exact"   ],
-	 de => [                                    "func_exact_para_stem"   , "func_exact_para"   , "func_exact_stem"   , "exact"   ],
-	 es => [                                    "func_exact_para_stem"   , "func_exact_para"   , "func_exact_stem"   , "exact"   ],
-	 ru => [                                    "func_exact_para_stem"   , "func_exact_para"   , "func_exact_stem"   , "exact"   ],
-	 cs => [                                                               "func_exact_para"   ,                       "exact"   ],
-	 hi => [                                                                                                           "exact"   ],
+	 en => ["func_exact_para_stem_syn_dep",    "func_exact_para_stem_syn"        , "func_exact_para_stem"   , "func_exact_para"   , "func_exact_stem"   , "exact"   ],
+	 fr => [                                                                       "func_exact_para_stem"   , "func_exact_para"   , "func_exact_stem"   , "exact"   ],
+	 de => [                                                                       "func_exact_para_stem"   , "func_exact_para"   , "func_exact_stem"   , "exact"   ],
+	 es => [                                                                       "func_exact_para_stem"   , "func_exact_para"   , "func_exact_stem"   , "exact"   ],
+	 ru => [                                                                       "func_exact_para_stem"   , "func_exact_para"   , "func_exact_stem"   , "exact"   ],
+	 cs => [                                                                                                  "func_exact_para"   ,                       "exact"   ],
+	 hi => [                                                                                                                                              "exact"   ],
 	);
 
 

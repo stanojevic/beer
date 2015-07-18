@@ -1,4 +1,51 @@
 #!/bin/bash
 BEER_HOME=`dirname $0`/
+
+
+##################################################################################
+METEOR_DIR=`ls $BEER_HOME/lib/meteor* -1d | head -1`
+if [ ! -d "$METEOR_DIR" ]; then
+  echo "METEOR is not present in the installation of BEER at the moment"
+  echo "Don't worry, I will install it for you now"
+  cd $BEER_HOME/lib
+  METEOR_LINK="http://www.cs.cmu.edu/~alavie/METEOR/download/meteor-1.5.tar.gz"
+  METEOR_TAR_GZ="meteor-1.5.tar.gz"
+  if hash curl 2>/dev/null; then
+    curl -l $METEOR_LINK > $METEOR_TAR_GZ
+  else
+    wget $METEOR_LINK -O $METEOR_TAR_GZ
+  fi
+  tar xfz $METEOR_TAR_GZ
+  rm $METEOR_TAR_GZ
+  cd -
+fi
+
+##################################################################################
+
+STANFORD_CORENLP_DIR=`ls $BEER_HOME/lib/stanford-corenlp* -1d | head -1`
+if [ ! -d "$STANFORD_CORENLP_DIR" ]; then
+  echo "Stanford CoreNLP is not present in the installation of BEER at the moment"
+  echo "Don't worry, I will install it for you now"
+  cd $BEER_HOME/lib
+  STANFORD_CORENLP_LINK="http://nlp.stanford.edu/software/stanford-corenlp-full-2015-01-29.zip"
+  STANFORD_CORENLP_ZIP="stanford-corenlp-full-2015-01-29.zip"
+  if hash curl 2>/dev/null; then
+    curl -l $STANFORD_CORENLP_LINK > $STANFORD_CORENLP_ZIP
+  else
+    wget $STANFORD_CORENLP_LINK -O $STANFORD_CORENLP_ZIP
+  fi
+  unzip $STANFORD_CORENLP_ZIP
+  rm $STANFORD_CORENLP_ZIP
+  cd -
+fi
+
+
+##################################################################################
+
+
+
+
+
+
 CP=`find $BEER_HOME -name \*.jar | tr "\n" :`
 java -Dfile.encoding=UTF8 -XX:+UseCompressedOops -Xmx5g -cp $CP multeval.MultEval $@

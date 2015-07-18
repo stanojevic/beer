@@ -18,6 +18,9 @@ ingredients:
     class: beer.ingredients.Kendall
   
   -
+    class: beer.ingredients.KendallScaled
+  
+  -
     class: beer.ingredients.PETcount
 
   -

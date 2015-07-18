@@ -10,16 +10,16 @@ BEER is trained a machine translation evaluation metric which puts special atten
 
 #Instalation
 
-BEER 1.0 includes all its dependencies in the tar.gz file except METEOR. METEOR will be downloaded on the first run of BEER. Basic installation commands on a standard Unix terminal could be as follows:
+BEER 1.1 includes all its dependencies in the tar.gz file except METEOR. METEOR will be downloaded on the first run of BEER. Basic installation commands on a standard Unix terminal could be as follows:
 
-    wget https://staff.fnwi.uva.nl/m.stanojevic/beer/beer_1.0.tar.gz
-    tar xfvz beer_1.0.tar.gz
-    ./beer_1.0/beer
-    rm beer_1.0.tar.gz
+    wget https://staff.fnwi.uva.nl/m.stanojevic/beer/beer_1.1.tar.gz
+    tar xfvz beer_1.1.tar.gz
+    ./beer_1.1/beer
+    rm beer_1.1.tar.gz
 
-After these commands the directory `beer_1.0` will contain all the necessary files. Even though this installation requires bash, BEER can run on Windows too. User can download BEER directly from the following link:
+After these commands the directory `beer_1.1` will contain all the necessary files. Even though this installation requires bash, BEER can run on Windows too. User can download BEER directly from the following link:
 
-[BEER 1.0](https://staff.fnwi.uva.nl/m.stanojevic/beer/beer_1.0.tar.gz)
+[BEER 1.1](https://staff.fnwi.uva.nl/m.stanojevic/beer/beer_1.1.tar.gz)
 
 and afterwords download meteor and extract it in the lib directory.
 
@@ -96,7 +96,7 @@ and mention exactly the value of alpha parameter and the word order metric used 
 
 BEER can be used as a permutation parser. 
 
-    java -cp $BEER_HOME/beer_1.0.jar beer.PermutationParser
+    java -cp $BEER_HOME/beer_1.1.jar beer.PermutationParser
 
 would open a terminal waiting for the permutation. After permutation is typed the program will generate code for GraphViz that would be compiled with dot and generate a png image that would be automatically openned. Naturally this requires Unix type of machine with GraphViz installed.
 

@@ -18,6 +18,7 @@ import beer.permutation.metric.scorers.FuzzyScore
 import beer.permutation.metric.lexical.Fscore
 import beer.permutation.metric.lexical.BLEU
 import beer.learningToRank.PRO
+import scala.collection.parallel.ForkJoinTaskSupport
 
 class BEER (val arguments:String, val beerHome:String, val configurationFile:String){
   
@@ -111,9 +112,25 @@ class BEER (val arguments:String, val beerHome:String, val configurationFile:Str
 
   def evaluateCorpus(weights:List[Double], allFactors:List[Map[String, Double]]) : Double = evaluateCorpusAvgSent(weights, allFactors)
   
-  def evaluate(sys:String, ref:String) : Double = {
-    evaluate( factors( sys, ref ) )
+  private var cache = Map[(String, String), Double]()
+  def cleanCache() : Unit = {
+    cache = Map[(String, String), Double]()
   }
+  
+  def evaluate(sys:String, ref:String) : Double = {
+    val scoreOption = cache.get((sys, ref))
+    scoreOption match {
+      case Some(score) =>
+        score
+      case None =>
+        val score = evaluate( factors( sys, ref ) )
+        if(conf.arguments.caching){
+          cache += (sys, ref) -> score
+        }
+        score
+    }
+  }
+  
   
   def evaluate(factors:Map[String, Double]) : Double = {
     if(model.isInstanceOf[PRO]){
@@ -134,12 +151,80 @@ class BEER (val arguments:String, val beerHome:String, val configurationFile:Str
     factorsAndTokens(sys, ref)._1
   }
   
+  def evaluateParallelBatch(data:List[(String, List[String])], threads:Int) : List[Double] = {
+    val n = data.size
+    
+    System.err.println(s"START Aligning $n sentences")
+
+    var alignedSentences = 0
+    val timeStart = System.currentTimeMillis()
+    
+    var alignedData = List[List[(SentencePair, SentencePair)]]()
+    for((sys, refs) <- data){
+      var currentAlignments = List[(SentencePair, SentencePair)]()
+      for(ref <- refs){
+        val alignmentSysRef:SentencePair = aligner.align(sys, ref)
+        if(model.isInstanceOf[PRO]){
+          val alignmentRefRef:SentencePair = aligner.align(ref, ref)
+          currentAlignments ::= (alignmentSysRef, alignmentRefRef)
+        }else{
+          currentAlignments ::= (alignmentSysRef, null)
+        }
+      }
+      alignedData ::= currentAlignments
+
+      alignedSentences += 1
+      if(alignedSentences % 10000 == 0){
+        System.err.println(s"aligned $alignedSentences")
+      }
+    }
+    val timeDoneAlign = System.currentTimeMillis()
+    val secondsAlign = (timeDoneAlign-timeStart)/1000
+    System.err.println(s"DONE Aligning $n sentences in $secondsAlign s")
+    
+    alignedData = alignedData.reverse
+    
+    
+    var evaluatedSentences = 0
+    System.err.println(s"START Scoring $n sentences")
+    val l = alignedData.par
+    l.tasksupport = 
+      new ForkJoinTaskSupport(new scala.concurrent.forkjoin.ForkJoinPool(threads))
+    val scores = l.map{currentAlignments:List[(SentencePair, SentencePair)] =>
+      currentAlignments.map{ case (alignmentSysRef, alignmentRefRef) =>
+        val (realFactors, realSysTokenization, realRefTokenization) = directFactorsAndTokens(alignmentSysRef)
+        val factors = if(model.isInstanceOf[PRO]){
+                        val (upperBoundFactors, _ , _ ) = directFactorsAndTokens(alignmentRefRef)
+                        val keys:Set[String] = realFactors.keySet ++ upperBoundFactors.keySet
+                        keys.map{fName:String =>
+                          (fName, realFactors.getOrElse(fName, 0.0) - upperBoundFactors.getOrElse(fName, 0.0))
+                        }.toMap
+                      }else{
+                        realFactors
+                      }
+        val score = evaluate(factors)
+        evaluatedSentences += 1
+        if(evaluatedSentences % 100 == 0){
+          System.err.println(s"evaluated $evaluatedSentences")
+        }
+        score
+      }.max
+    }.toList
+    val timeDoneEval = System.currentTimeMillis()
+    val secondsEval = (timeDoneEval-timeDoneAlign)/1000
+    System.err.println(s"DONE Scoring $n sentences in $secondsEval s")
+
+    scores
+  }
+  
   def factorsAndTokens(sys:String, ref:String):(Map[String, Double], List[String], List[String]) = {
     
-    val (realFactors,       realSysTokenization, realRefTokenization) = directFactorsAndTokens(sys, ref)
+    val alignmentSysRef = aligner.align(sys, ref)
+    val (realFactors,       realSysTokenization, realRefTokenization) = directFactorsAndTokens(alignmentSysRef)
 
     val factors = if(model.isInstanceOf[PRO]){
-                    val (upperBoundFactors, _ , _ ) = directFactorsAndTokens(ref, ref)
+                    val alignmentRefRef = aligner.align(ref, ref)
+                    val (upperBoundFactors, _ , _ ) = directFactorsAndTokens(alignmentRefRef)
                     val keys:Set[String] = realFactors.keySet ++ upperBoundFactors.keySet
                     keys.map{fName:String =>
                       (fName, realFactors.getOrElse(fName, 0.0) - upperBoundFactors.getOrElse(fName, 0.0))
@@ -151,10 +236,14 @@ class BEER (val arguments:String, val beerHome:String, val configurationFile:Str
     (factors, realSysTokenization, realRefTokenization)
   }
   
-  def directFactorsAndTokens(sys:String, ref:String):(Map[String, Double], List[String], List[String]) = {
-    val alignment = aligner.align(sys, ref)
+  def directFactorsAndTokens(alignment:SentencePair):(Map[String, Double], List[String], List[String]) = {
     val factors = factoredMetric(alignment)
     (factors, alignment.sys, alignment.ref)
+  }
+
+  def directFactorsAndTokens(sys:String, ref:String):(Map[String, Double], List[String], List[String]) = {
+    val alignment = aligner.align(sys, ref)
+    directFactorsAndTokens(alignment)
   }
 
   /**
@@ -221,7 +310,11 @@ class BEER (val arguments:String, val beerHome:String, val configurationFile:Str
     }else{
       val score1 = model.scoreInstance(sys1)
       val score2 = model.scoreInstance(sys2)
-      score1/(score1+score2)
+      if(score1+score2 == 0){
+        0.5
+      }else{
+        score1/(score1+score2)
+      }
     }
   }
   
@@ -236,11 +329,12 @@ class BEER (val arguments:String, val beerHome:String, val configurationFile:Str
     val weightedLabeledData = labeledData.map{ case (win, los) => (win, los, 1.0)}
     
     System.gc()
-    Log.println(conf, "STARTED TRAINING "+conf.arguments.lang)
+    System.err.println("STARTED TRAINING "+conf.arguments.lang)
     model.trainModel(weightedLabeledData) //initial model
-    Log.println(conf, "FINISHED TRAINING "+conf.arguments.lang)
+    System.err.println("FINISHED TRAINING "+conf.arguments.lang)
     
     for(iteration <- 1 to unsupervisedIterations) {
+      System.err.println(s"unsupervised iteration $iteration started")
 
       val poorlyWeightedUnlabeledData = unlabeledData.map{ case (first, second) =>
         val firstScore  = probabilityFirstBetterThanSecond(first , second)
@@ -252,14 +346,20 @@ class BEER (val arguments:String, val beerHome:String, val configurationFile:Str
         }
       }
       
-      val avgWeight = poorlyWeightedUnlabeledData.map{_._3}.sum/poorlyWeightedUnlabeledData.size
+      val minWeight = poorlyWeightedUnlabeledData.map{_._3}.min
+      val maxWeight = poorlyWeightedUnlabeledData.map{_._3}.max
       
       val weightedUnlabeledData = poorlyWeightedUnlabeledData.map{ case (win, los, weight) =>
-        (win, los, weight/(2*avgWeight))
+        (win, los, (weight-minWeight)/maxWeight)
       }
       
-      val trainingData = weightedLabeledData++weightedUnlabeledData
+      //val trainingData = weightedLabeledData++weightedUnlabeledData
+      val trainingData = weightedUnlabeledData
       model.trainModel(trainingData)
+      
+      new File(modelDestination+"."+iteration).mkdir()
+      model.saveModel(modelDestination+"."+iteration)
+      System.err.println(s"unsupervised iteration $iteration done")
     }
     
     model.saveModel(modelDestination)

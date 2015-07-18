@@ -1,6 +1,8 @@
 ---
 
 weka_models:
+  func_exact_para_stem_syn_dep: &func_exact_para_stem_syn_dep_models_weka
+    en_func_exact_para_stem_syn_dep_weka: $BEER/models/en_func_exact_para_stem_syn_dep_weka
   func_exact_para_stem_syn: &func_exact_para_stem_syn_models_weka
     en_func_exact_para_stem_syn_weka: $BEER/models/en_func_exact_para_stem_syn_weka
   func_exact_para_stem: &func_exact_para_stem_models_weka
@@ -36,6 +38,8 @@ weka_models:
     other_exact_weka: $BEER/models/other_exact_weka
 
 RankNet_models:
+  func_exact_para_stem_syn_dep: &func_exact_para_stem_syn_dep_models_RankNet
+    en_func_exact_para_stem_syn_dep_RankNet: $BEER/models/en_func_exact_para_stem_syn_dep_RankNet
   func_exact_para_stem_syn: &func_exact_para_stem_syn_models_RankNet
     en_func_exact_para_stem_syn_RankNet: $BEER/models/en_func_exact_para_stem_syn_RankNet
   func_exact_para_stem: &func_exact_para_stem_models_RankNet
@@ -78,13 +82,18 @@ resources:
     stem: yes
     normalization: yes
     models:
-      evaluation: $BEER/models/en_func_exact_para_stem_syn_weka
-      evaluationANN: $BEER/models/en_func_exact_para_stem_syn_RankNet
+      evaluation: $BEER/models/en_func_exact_para_stem_syn_dep_weka
+      evaluationNoSyntax: $BEER/models/en_func_exact_para_stem_syn_weka
+      tuning: $BEER/models/tuning_en_func_exact_para_stem_syn_weka
+      wmttuning: $BEER/models/en_func_exact_para_stem_syn_weka
+      evaluationANN: $BEER/models/en_func_exact_para_stem_syn_dep_RankNet
+      <<: *func_exact_para_stem_syn_dep_models_weka
       <<: *func_exact_para_stem_syn_models_weka
       <<: *func_exact_para_stem_models_weka
       <<: *func_exact_para_models_weka
       <<: *func_exact_stem_models_weka
       <<: *exact_models_weka
+      <<: *func_exact_para_stem_syn_dep_models_RankNet
       <<: *func_exact_para_stem_syn_models_RankNet
       <<: *func_exact_para_stem_models_RankNet
       <<: *func_exact_para_models_RankNet
@@ -161,6 +170,7 @@ resources:
     normalization: yes
     models:
       evaluation: $BEER/models/cs_func_exact_para_weka
+      wmttuning: $BEER/models/cs_func_exact_para_weka
       evaluationANN: $BEER/models/cs_func_exact_para_RankNet
       <<: *func_exact_para_models_weka
       <<: *exact_models_weka
@@ -169,6 +179,26 @@ resources:
   ur:
     funcWords:  $BEER/resources/urdu/function.words
     paraphrase: $BEER/resources/urdu/paraphrase.gz
+    models:
+      evaluation: $BEER/models/other_func_exact_para_weka
+      evaluationANN: $BEER/models/other_func_exact_para_RankNet
+      <<: *func_exact_para_models_weka
+      <<: *exact_models_weka
+      <<: *func_exact_para_models_RankNet
+      <<: *exact_models_RankNet
+  ar:
+    funcWords:  $BEER/resources/arabic/function.words
+    paraphrase: $BEER/resources/arabic/paraphrase.gz
+    models:
+      evaluation: $BEER/models/other_func_exact_para_weka
+      evaluationANN: $BEER/models/other_func_exact_para_RankNet
+      <<: *func_exact_para_models_weka
+      <<: *exact_models_weka
+      <<: *func_exact_para_models_RankNet
+      <<: *exact_models_RankNet
+  ja:
+    funcWords:  $BEER/resources/japanese/function.words
+    paraphrase: $BEER/resources/japanese/paraphrase.gz
     models:
       evaluation: $BEER/models/other_func_exact_para_weka
       evaluationANN: $BEER/models/other_func_exact_para_RankNet
@@ -258,12 +288,15 @@ resources:
     funcWords:  $METEOR/resources/function/other.words
     models:
       evaluation: $BEER/models/other_exact_weka
+      wmttuning: $BEER/models/other_exact_weka
       evaluationANN: $BEER/models/other_func_exact_stem_RankNet
+      <<: *func_exact_para_stem_syn_dep_models_weka
       <<: *func_exact_para_stem_syn_models_weka
       <<: *func_exact_para_stem_models_weka
       <<: *func_exact_para_models_weka
       <<: *func_exact_stem_models_weka
       <<: *exact_models_weka
+      <<: *func_exact_para_stem_syn_dep_models_RankNet
       <<: *func_exact_para_stem_syn_models_RankNet
       <<: *func_exact_para_stem_models_RankNet
       <<: *func_exact_para_models_RankNet

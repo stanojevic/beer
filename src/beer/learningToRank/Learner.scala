@@ -45,7 +45,12 @@ trait Learner {
     val filteredFeatures = filterNonExistingFeatures(featureMapping, features)
     val convertedFeatures = convertFeatures(featureMapping, filteredFeatures)
 
-    classify(convertedFeatures)
+    val score = classify(convertedFeatures)
+    if(score.isInfinite() || score.isNaN()){
+      0.0
+    }else{
+      score
+    }
   }
   
   private final def convertFeatures(featureMapping:Map[String,Int], features:UnFilteredFeatures) : Features = {

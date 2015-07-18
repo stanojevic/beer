@@ -146,8 +146,17 @@ sub findReference{
 #dirty ad-hoc solution
 	my ($langPairDir) = @_;
 	my $langPair = basename($langPairDir);
-	my $ref = "$langPairDir/../../../references/newstest2014-ref.$langPair";
-	return $ref;
+	$langPair=~/(..)-(..)/;
+	my $srcLang = $1;
+	my $tgtLang = $2;
+#my $ref = "$langPairDir/../../../references/newstest2014-ref.$langPair";
+	my $ref = "$langPairDir/../../../references/newstest2015-".$srcLang.$tgtLang."-ref.".$tgtLang;
+	if(-e $ref){
+		return $ref;
+	}else{
+		$ref = "$langPairDir/../../../references/newsdiscusstest2015-".$srcLang.$tgtLang."-ref.".$tgtLang;
+		return $ref;
+	}
 #	my @refs = glob ("$langPairDir/reference*");
 #	if(@refs == 1){
 #		return $refs[0];
@@ -212,6 +221,13 @@ die "lang pairs are obligatory argument\n" unless @langPairsToTest;
 die "metricName is obligatory\n" unless $metricName;
 #...
 #example usage:
+#nohup /home/mstanoj1/experiments/2015_WMT_metrics_task/beer_1.1_alpha_dep/scripts/test.pl --dataDir /home/mstanoj1/experiments/2015_WMT_metrics_task/wmt15/wmt15-metrics-task/txt/system-outputs/newstest2015/ --corpusCmd '/home/mstanoj1/experiments/2015_WMT_metrics_task/wmt15/../beer_1.1_alpha_dep/beer -l __LANG__ -s __S__ -r __R__ | sed "sBcorpus beer        : BB"'  --langPairs cs-en  de-en  en-cs  en-de  en-ru  fi-en  ru-en --metricName BEER --CPUs 10 > BEER.sys.score 2> BEER.sys.err &
+#
+#nohup /home/mstanoj1/experiments/2015_WMT_metrics_task/beer_1.1_alpha_dep/scripts/test.pl --dataDir /home/mstanoj1/experiments/2015_WMT_metrics_task/wmt15/wmt15-metrics-task/txt/system-outputs/newstest2015/ --sentCmd '/home/mstanoj1/experiments/2015_WMT_metrics_task/wmt15/../beer_1.1_alpha_dep/beer -l __LANG__ -s __S__ -r __R__ --printSentScores | sed "sBbest beer     : BB" | grep -v corpus' --langPairs cs-en  de-en  en-cs  en-de  en-ru  fi-en  ru-en  --metricName BEER --CPUs 10 > BEER.seg.score 2> BEER.seg.err &
+#
+#
+#
+#
 #
 #nohup ./scripts/test.pl --dataDir ~/experiments/2015_ACL/wmt14/wmt14-metrics-task/baselines/data/plain/system-outputs/newstest2014/ --corpusCmd './beer -l __LANG__ -s __S__ -r __R__ | sed "sBcorpus beer        : BB"'  --langPairs en-cs en-ru en-hi en-de en-fr cs-en ru-en hi-en de-en fr-en --metricName BEER_final --CPUs 10 > BEER_full.sys.score 2> BEER_full.sys.err &
 #

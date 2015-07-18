@@ -167,7 +167,7 @@ object Evaluation {
     val unlabeledFeatures2 = if(unlabeledFeaturesFile2 != "") FactoredScores.loadFactoredScores(unlabeledFeaturesFile2).map{_.featuresAllRefs(0)} else List()
     val unlabeledData = (unlabeledFeatures1 zip unlabeledFeatures2)
 
-    val unsupervisedIterations = 0
+    val unsupervisedIterations = beer.conf.arguments.unsupervisedIterations
 
     beer.train(labeledData, unlabeledData, unsupervisedIterations)
   }
@@ -175,9 +175,25 @@ object Evaluation {
   private def interactive(beer:BEER) : Unit = {
     System.err.println("Ready for interacitve mode")
     System.err.println("Shoot!")
+    var batchToProcess = List[(String, List[String])]()
     for (ln <- Source.fromInputStream(System.in, "UTF-8").getLines){
       val fields = ln split """ \|\|\| """
       fields(0) match{
+
+        case "EVAL BATCH PUSH" =>
+          val sys = fields(1)
+          val refs:List[String] = (2 until fields.size).toList.map{fields(_)}
+          batchToProcess ::= (sys, refs)
+
+        case "RUN EVAL BEST BATCH" =>
+          val threads = fields(1).toInt
+          batchToProcess = batchToProcess.reverse
+          val scores:List[Double] = beer.evaluateParallelBatch(batchToProcess, threads)
+          for(score <- scores){
+            println(score)
+          }
+          batchToProcess = List()
+
         case "EVAL BEST" =>
           val sys = fields(1)
           val refs = (2 until fields.size) map (fields(_))
@@ -216,6 +232,9 @@ object Evaluation {
         case "EXIT" =>
           System.err.println("Good bye")
           return
+        
+        case "CLEAN CACHE" =>
+          beer.cleanCache()
         
         case _ =>
           System.err.println("Non existing command")

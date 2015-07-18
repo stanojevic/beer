@@ -2,7 +2,6 @@ package beer.ingredients
 
 import beer.alignment.Aligner.SentencePair
 
-
 trait SparseIngredient {
   
   val featureName:String

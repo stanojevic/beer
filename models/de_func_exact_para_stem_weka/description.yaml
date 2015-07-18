@@ -13,9 +13,13 @@ brewer:
     classifier: weka.classifiers.functions.Logistic
     classifierParams: -R 1.0E-8 -M -1
 
+
 ingredients:
   -
     class: beer.ingredients.Kendall
+  
+  -
+    class: beer.ingredients.KendallScaled
   
   -
     class: beer.ingredients.PETcount
