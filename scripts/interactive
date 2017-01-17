@@ -1,0 +1,4 @@
+#!/bin/bash
+BEER_HOME=`dirname $0 | sed "s/scripts$//"`
+CP=`ls $BEER_HOME/*.jar $BEER_HOME/lib/*.jar -1 | tr "\n" :`
+java -Xmx1G -cp $CP beer.InteractiveApp $@

@@ -1,0 +1,110 @@
+features:
+  -
+    name: length-disbalance
+    exponential: false
+    degrees: [1.0]
+
+  -
+    name: skip-bigram
+    maxSkipSize: 1
+    symmetry: true
+    fScores: [1.0]
+    gScores: [1.0]
+    
+  -
+    name: skip-bigram
+    maxSkipSize: 2
+    symmetry: true
+    fScores: [1.0]
+    gScores: [1.0]
+    
+  -
+    name: skip-bigram
+    maxSkipSize: 3
+    symmetry: true
+    fScores: [1.0]
+    gScores: [1.0]
+    
+  -
+    name: skip-bigram
+    maxSkipSize: 4
+    symmetry: true
+    fScores: [1.0]
+    gScores: [1.0]
+    
+  -
+    name: skip-bigram
+    maxSkipSize: 1000000
+    symmetry: true
+    fScores: [1.0]
+    gScores: [1.0]
+
+  -
+    name:  ngram
+    order: 1
+    symmetry: true
+    fScores: [1.0]
+    gScores: [1.0]
+    
+  -
+    name:  ngram
+    order: 2
+    symmetry: true
+    fScores: [1.0]
+    gScores: [1.0]
+    
+  -
+    name:  ngram
+    order: 3
+    symmetry: true
+    fScores: [1.0]
+    gScores: [1.0]
+    
+  -
+    name:  ngram
+    order: 4
+    symmetry: true
+    fScores: [1.0]
+    gScores: [1.0]
+    
+  -
+    name:  char-ngram
+    order: 1
+    symmetry: true
+    fScores: [1.0]
+    gScores: [1.0]
+    
+  -
+    name:  char-ngram
+    order: 2
+    symmetry: true
+    fScores: [1.0]
+    gScores: [1.0]
+    
+  -
+    name:  char-ngram
+    order: 3
+    symmetry: true
+    fScores: [1.0]
+    gScores: [1.0]
+    
+  -
+    name:  char-ngram
+    order: 4
+    symmetry: true
+    fScores: [1.0]
+    gScores: [1.0]
+    
+  -
+    name:  char-ngram
+    order: 5
+    symmetry: true
+    fScores: [1.0]
+    gScores: [1.0]
+    
+  -
+    name:  char-ngram
+    order: 6
+    symmetry: true
+    fScores: [1.0]
+    gScores: [1.0]

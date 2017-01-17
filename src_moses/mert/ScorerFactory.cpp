@@ -10,8 +10,8 @@
 #include "InterpolatedScorer.h"
 #include "SemposScorer.h"
 #include "PermutationScorer.h"
-#include "MeteorScorer.h"
 #include "BeerScorer.h"
+#include "MeteorScorer.h"
 #include "HwcmScorer.h"
 #include "Reference.h"
 
@@ -34,7 +34,6 @@ vector<string> ScorerFactory::getTypes()
   types.push_back(string("SEMPOS"));
   types.push_back(string("LRSCORE"));
   types.push_back(string("METEOR"));
-  types.push_back(string("BEER"));
   types.push_back(string("HWCM"));
   return types;
 }
@@ -58,10 +57,10 @@ Scorer* ScorerFactory::getScorer(const string& type, const string& config)
     return new SemposScorer(config);
   } else if ((type == "HAMMING") || (type == "KENDALL")) {
     return (PermutationScorer*) new PermutationScorer(type, config);
-  } else if (type == "METEOR") {
-    return new MeteorScorer(config);
   } else if (type == "BEER") {
     return new BeerScorer(config);
+  } else if (type == "METEOR") {
+    return new MeteorScorer(config);
   } else if (type == "HWCM") {
     return new HwcmScorer(config);
   } else {
