@@ -28,7 +28,7 @@ If you want to tune the Moses system with BEER you need to compile Moses with ad
 
 License
 ----
-BEER is published under [Apache License Version 2.0](https://www.apache.org/licenses/LICENSE-2.0) license.
+BEER is published under [Apache License Version 2.0](https://www.apache.org/licenses/LICENSE-2.0) license. In other words it's free as in "free speech", but also as in "free BEER".
 
 This license is compatible with the libraries that BEER uses:
 - liblinear-java
