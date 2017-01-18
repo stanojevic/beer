@@ -51,11 +51,12 @@ University of Amsterdam
 
 #References
 
+If you use BEER please cite the first reference. Other references are more about things that are related to BEER but not about the current BEER. The new version of BEER is most similar to the one in the first paper but there are some small new things in BEER 2.0 that are not documented yet.
+
 1. Miloš Stanojević and Khalil Sima’an -- [BEER: BEtter Evaluation as Ranking](http://www.statmt.org/wmt14/pdf/W14-3354.pdf) - WMT 2014
 2. Miloš Stanojević and Khalil Sima’an -- [Fitting Sentence Level Translation Evaluation with Many Dense Features](http://aclweb.org/anthology/D14-1025) - EMNLP 2014
 3. Miloš Stanojević and Khalil Sima’an -- [Evaluating Word Order Recursively over Permutation-Forests](http://aclweb.org/anthology/W/W14/W14-4017.pdf) -- SSST 2014
-6 lines yanked                                                                                                                              126,0-1       Bot
-4. Miloš Stanojević and Khalil Sima’an -- [BEER 1.1: ILLC UvA submission to metrics and tuning task](http://www.statmt.org/wmt15/pdf/WMT50.pdf) -- WMT 2015
-5. Miloš Stanojević and Khalil Sima’an -- [Hierarchical Permutation Complexity for Word Order Evaluation](http://www.statmt.org/wmt15/pdf/WMT50.pd://staff.fnwi.uva.nl/m.stanojevic/papers/2016_COLING_pets_evaluation.pdf) -- COLING 2016
-
+4. Miloš Stanojević and Khalil Sima’an -- [Evaluating MT systems with BEER](https://ufal.mff.cuni.cz/pbml/104/art-stanojevic-simaan.pdf) -- PBML 2015
+5. Miloš Stanojević and Khalil Sima’an -- [BEER 1.1: ILLC UvA submission to metrics and tuning task](http://www.statmt.org/wmt15/pdf/WMT50.pdf) -- WMT 2015
+6. Miloš Stanojević and Khalil Sima’an -- [Hierarchical Permutation Complexity for Word Order Evaluation](https://staff.fnwi.uva.nl/m.stanojevic/papers/2016_COLING_pets_evaluation.pdf) -- COLING 2016
 
