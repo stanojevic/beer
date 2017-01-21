@@ -53,8 +53,8 @@ University of Amsterdam
 
 If you use BEER please cite the first reference. Other references are more about things that are related to BEER but not about the current BEER. The new version of BEER is most similar to the one in the first paper but there are some small new things in BEER 2.0 that are not documented yet.
 
-1. Miloš Stanojević and Khalil Sima’an -- [BEER: BEtter Evaluation as Ranking](http://www.statmt.org/wmt14/pdf/W14-3354.pdf) - WMT 2014 [bib](http://www.statmt.org/wmt14/bib/W14-3354.bib)
-2. Miloš Stanojević and Khalil Sima’an -- [Fitting Sentence Level Translation Evaluation with Many Dense Features](http://aclweb.org/anthology/D14-1025) - EMNLP 2014
+1. Miloš Stanojević and Khalil Sima’an -- [Fitting Sentence Level Translation Evaluation with Many Dense Features](http://aclweb.org/anthology/D14-1025) - EMNLP 2014 [bib](http://aclweb.org/anthology/D/D14/D14-1025.bib)
+2. Miloš Stanojević and Khalil Sima’an -- [BEER: BEtter Evaluation as Ranking](http://www.statmt.org/wmt14/pdf/W14-3354.pdf) - WMT 2014
 3. Miloš Stanojević and Khalil Sima’an -- [Evaluating Word Order Recursively over Permutation-Forests](http://aclweb.org/anthology/W/W14/W14-4017.pdf) -- SSST 2014
 4. Miloš Stanojević and Khalil Sima’an -- [Evaluating MT systems with BEER](https://ufal.mff.cuni.cz/pbml/104/art-stanojevic-simaan.pdf) -- PBML 2015
 5. Miloš Stanojević and Khalil Sima’an -- [BEER 1.1: ILLC UvA submission to metrics and tuning task](http://www.statmt.org/wmt15/pdf/WMT50.pdf) -- WMT 2015
