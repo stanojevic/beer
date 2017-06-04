@@ -6,7 +6,8 @@ BEER 2.0 is a trained machine translation evaluation metric with high correlatio
 This pages is about the newest version of BEER which is 2.0 that was used on WMT16 metrics task. If you want to use old version from WMT15 metrics task which has some features not present in the new version (paraphrasing, reordering only evaluation, syntactic features...) then look at the branch for [BEER 1.1](https://github.com/stanojevic/beer/tree/BEER_1.1)
 
 
-#Installation
+Installation
+----
 
 BEER 2.0 includes all its dependencies in the tar.gz. Basic installation commands on a standard Unix terminal could be as follows:
 
@@ -15,7 +16,8 @@ BEER 2.0 includes all its dependencies in the tar.gz. Basic installation command
 
 After these commands the directory `beer_2.0` will contain all the necessary files.
 
-#Usage
+Usage
+----
 
 In the installation directory there will be a shell script `beer` that should be used for evaluation. Its usage is straightforward:
 
@@ -49,7 +51,8 @@ University of Amsterdam
 
 
 
-#References
+References
+----
 
 If you use BEER please cite the first reference. Other references are more about things that are related to BEER but not about the current BEER. The new version of BEER is most similar to the one in the first paper but there are some small new things in BEER 2.0 that are not documented yet.
 
@@ -59,4 +62,5 @@ If you use BEER please cite the first reference. Other references are more about
 4. Miloš Stanojević and Khalil Sima’an -- [Evaluating MT systems with BEER](https://ufal.mff.cuni.cz/pbml/104/art-stanojevic-simaan.pdf) -- PBML 2015
 5. Miloš Stanojević and Khalil Sima’an -- [BEER 1.1: ILLC UvA submission to metrics and tuning task](http://www.statmt.org/wmt15/pdf/WMT50.pdf) -- WMT 2015
 6. Miloš Stanojević and Khalil Sima’an -- [Hierarchical Permutation Complexity for Word Order Evaluation](https://staff.fnwi.uva.nl/m.stanojevic/papers/2016_COLING_pets_evaluation.pdf) -- COLING 2016
+7. Miloš Stanojević and Khalil Sima’an -- [Alternative Objective Functions for Training MT Evaluation Metrics](https://staff.fnwi.uva.nl/m.stanojevic/papers/2017_ACL.pdf) -- ACL 2017
 
