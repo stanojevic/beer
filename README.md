@@ -3,7 +3,7 @@ BEER 2.0
 
 BEER 2.0 is a trained machine translation evaluation metric with high correlation with human judgment both on sentence and corpus level. For the papers that describe BEER in more detail look at the [References section](https://github.com/stanojevic/beer#references) on this page.
 
-This pages is about the newest version of BEER which is 2.0 that was used on WMT16 metrics task. If you want to use old version from WMT15 metrics task which has some features not present in the new version (paraphrasing, reordering only evaluation, syntactic features...) then look at the branch for [BEER 1.1](https://github.com/stanojevic/beer/tree/BEER_1.1)
+This pages is about the newest version of BEER which is [BEER 2.0](https://github.com/stanojevic/beer) that was used on WMT16 metrics task. If you want to use old version from WMT15 metrics task which has some features not present in the new version (paraphrasing, reordering only evaluation, syntactic features...) then look at the old branch for expired [BEER 1.1](https://github.com/stanojevic/beer/tree/BEER_1.1)
 
 
 Installation
@@ -43,7 +43,7 @@ This license is compatible with the libraries that BEER uses:
 
 Authors
 ----
-[Miloš Stanojević](https://staff.fnwi.uva.nl/m.stanojevic) and [Khalil Sima'an](https://staff.fnwi.uva.nl/k.simaan/)
+[Miloš Stanojević](https://stanojevic.github.io/) and [Khalil Sima'an](https://staff.fnwi.uva.nl/k.simaan/)
 
 Institute for Logic, Language and Computation
 
@@ -61,6 +61,6 @@ If you use BEER please cite the first reference. Other references are more about
 3. Miloš Stanojević and Khalil Sima’an -- [Evaluating Word Order Recursively over Permutation-Forests](http://aclweb.org/anthology/W/W14/W14-4017.pdf) -- SSST 2014
 4. Miloš Stanojević and Khalil Sima’an -- [Evaluating MT systems with BEER](https://ufal.mff.cuni.cz/pbml/104/art-stanojevic-simaan.pdf) -- PBML 2015
 5. Miloš Stanojević and Khalil Sima’an -- [BEER 1.1: ILLC UvA submission to metrics and tuning task](http://www.statmt.org/wmt15/pdf/WMT50.pdf) -- WMT 2015
-6. Miloš Stanojević and Khalil Sima’an -- [Hierarchical Permutation Complexity for Word Order Evaluation](https://staff.fnwi.uva.nl/m.stanojevic/papers/2016_COLING_pets_evaluation.pdf) -- COLING 2016
-7. Miloš Stanojević and Khalil Sima’an -- [Alternative Objective Functions for Training MT Evaluation Metrics](https://staff.fnwi.uva.nl/m.stanojevic/papers/2017_ACL.pdf) -- ACL 2017
+6. Miloš Stanojević and Khalil Sima’an -- [Hierarchical Permutation Complexity for Word Order Evaluation](https://aclweb.org/anthology/C/C16/C16-1204.pdf) -- COLING 2016
+7. Miloš Stanojević and Khalil Sima’an -- [Alternative Objective Functions for Training MT Evaluation Metrics](http://aclweb.org/anthology/P/P17/P17-2004.pdf) -- ACL 2017
 
