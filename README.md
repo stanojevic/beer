@@ -11,7 +11,7 @@ Installation
 
 BEER 2.0 includes all its dependencies in the tar.gz. Basic installation commands on a standard Unix terminal could be as follows:
 
-    wget https://staff.fnwi.uva.nl/m.stanojevic/beer/beer_2.0.tar.gz
+    wget https://raw.githubusercontent.com/stanojevic/beer/master/packaged/beer_2.0.tar.gz
     tar xfvz beer_2.0.tar.gz
 
 After these commands the directory `beer_2.0` will contain all the necessary files.
